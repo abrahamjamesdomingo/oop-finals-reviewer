@@ -568,167 +568,800 @@ rules:{title:"The three rules of overriding",items:[
  "Private methods cannot be overridden — an Overridable method must be Public or Protected."]},
 summary:["Overridable = permission (parent).","Overrides = replacement (child).","MyBase.MethodName() = run the original first, then add steps.","Overriding is VB.NET's runtime polymorphism in action."]}
 ];
-const FLASHCARDS=[
-{t:"Class",d:"The blueprint or template. Objects are created from it.",s:"M1 · cookie cutter"},
-{t:"Object",d:"An instance of a class — a 'cookie' made from the cutter.",s:"M1"},
-{t:"Fields",d:"Private variables inside a class that store its data.",s:"M1 · hidden memory"},
-{t:"Constructor — Sub New",d:"Runs once when the object is created; sets starting values.",s:"M1 · birth setup"},
-{t:"Properties",d:"Public Get/Set 'doors' that safely expose private fields.",s:"M1"},
-{t:"ReadOnly property",d:"Has only a Get block — it can be read from outside but never assigned.",s:"M1 · e.g. Dog.Name"},
-{t:"Sub vs Function",d:"Sub = action, returns nothing. Function = calculation, returns a value.",s:"M1 · Bark vs GetHumanYears"},
-{t:"Encapsulation",d:"Wrapping variables and the methods that use them together in one class shell.",s:"M2 · pill capsule"},
-{t:"Information hiding",d:"Keeping fields Private so outside code cannot break the internals.",s:"M2 · TV remote wires"},
-{t:"Golden Rule of encapsulation",d:"Variables are always Private; methods and properties are always Public.",s:"M2"},
-{t:"Get / Set accessors",d:"Get returns the field's value; Set validates and assigns using the 'value' keyword.",s:"M2"},
-{t:"Why encapsulate?",d:"Invalid data gets rejected at the door — the object protects itself.",s:"M2 · grade guard"},
-{t:"Inheritance",d:"A child class reuses the members of a parent class using Inherits.",s:"M3 · family tree"},
-{t:"Base class",d:"The parent class that shares its members with its children.",s:"M3"},
-{t:"Derived class",d:"The child class that inherits from the base and adds its own members.",s:"M3"},
-{t:"IS-A relationship",d:"Student IS A Person; SavingsAccount IS A BankAccount; Manager IS AN Employee.",s:"M3"},
-{t:"Protected",d:"Hidden from the Windows Form, but child classes can use it directly.",s:"M3"},
-{t:"MyBase.New(...)",d:"Called in the child's constructor to pass starting values up to the parent's constructor.",s:"M3"},
-{t:"Shared member",d:"Belongs to the class itself rather than to each object instance.",s:"Syllabus Ch 1"},
-{t:"Me",d:"VB.NET's keyword for the current instance — like 'this' in other languages.",s:"Syllabus Ch 1"},
-{t:"Overridable",d:"Marks a parent method as overridable — permission granted.",s:"M4 · parent header"},
-{t:"Overrides",d:"Marks the child's method as replacing the parent's version.",s:"M4 · child header"},
-{t:"MyBase.MethodName()",d:"Optional: runs the parent's original version first, then you add steps on top.",s:"M4 · adobo + coconut milk"},
-{t:"Three overriding rules",d:"Match the signature; the parent must be Overridable; Private methods can never be overridden.",s:"M4"}
+const FLASHCARDS = [
+  {
+    "t": "Class",
+    "d": "A blueprint or template in OOP defining fields (state) and methods/properties (behavior) from which concrete objects are created.",
+    "s": "Module 1 · OOP Foundations"
+  },
+  {
+    "t": "Object",
+    "d": "A concrete instance of a class allocated in memory, having its own separate copy of instance data.",
+    "s": "Module 1 · OOP Foundations"
+  },
+  {
+    "t": "Fields",
+    "d": "Member variables inside a class that store its internal data. Typically declared Private to enforce information hiding.",
+    "s": "Module 1 · OOP Foundations"
+  },
+  {
+    "t": "Constructor (Sub New)",
+    "d": "A special procedure that runs automatically and exactly once upon object instantiation to initialize state.",
+    "s": "Module 1 · OOP Foundations"
+  },
+  {
+    "t": "Properties",
+    "d": "Public Get/Set accessors that provide safe, controlled, and validated access to private backing fields.",
+    "s": "Module 1 · OOP Foundations"
+  },
+  {
+    "t": "ReadOnly Property",
+    "d": "A property containing only a Get block; external callers can read its value but can never assign to it.",
+    "s": "Module 1 · OOP Foundations"
+  },
+  {
+    "t": "Sub vs Function",
+    "d": "A Sub executes actions without returning a value; a Function executes computations and returns a typed result.",
+    "s": "Module 1 · OOP Foundations"
+  },
+  {
+    "t": "Encapsulation",
+    "d": "Bundling data and operations into a single class unit while restricting direct external access to internal state.",
+    "s": "Module 2 · Encapsulation"
+  },
+  {
+    "t": "Information Hiding",
+    "d": "Restricting visibility of internal fields (using Private) so outside callers cannot corrupt object state.",
+    "s": "Module 2 · Encapsulation"
+  },
+  {
+    "t": "Principle of Least Privilege",
+    "d": "In class design: keep fields Private and expose only necessary methods and properties as Public.",
+    "s": "Module 2 · Encapsulation"
+  },
+  {
+    "t": "Get / Set Accessors",
+    "d": "Get returns the private field value; Set validates and stores the incoming value using the contextual 'value' keyword.",
+    "s": "Module 2 · Encapsulation"
+  },
+  {
+    "t": "Why Encapsulate?",
+    "d": "Guards object integrity by validating inputs before assignment, preventing illegal or invalid data states.",
+    "s": "Module 2 · Encapsulation"
+  },
+  {
+    "t": "Inheritance",
+    "d": "An OOP mechanism where a derived (child) class inherits non-private members of a base (parent) class using Inherits.",
+    "s": "Module 3 · Inheritance"
+  },
+  {
+    "t": "Base Class",
+    "d": "The parent class that provides reusable fields, properties, and methods to derived child classes.",
+    "s": "Module 3 · Inheritance"
+  },
+  {
+    "t": "Derived Class",
+    "d": "The child class that inherits members from a base class and can add new fields, properties, or override behaviors.",
+    "s": "Module 3 · Inheritance"
+  },
+  {
+    "t": "IS-A Relationship",
+    "d": "The fundamental test for inheritance: e.g., Student IS A Person, Manager IS AN Employee.",
+    "s": "Module 3 · Inheritance"
+  },
+  {
+    "t": "Protected",
+    "d": "An access modifier that allows access within the declaring class and its derived child classes, but hides it from forms/external callers.",
+    "s": "Module 3 · Inheritance"
+  },
+  {
+    "t": "MyBase.New(...)",
+    "d": "Invoked inside a derived class constructor to pass required initial values up to the base class constructor.",
+    "s": "Module 3 · Inheritance"
+  },
+  {
+    "t": "Shared Member",
+    "d": "A class member marked Shared that belongs to the class type itself rather than to individual object instances.",
+    "s": "Syllabus · VB.NET Member Types"
+  },
+  {
+    "t": "Me Keyword",
+    "d": "VB.NET reference referring to the current instance of the class (equivalent to 'this' in C#/Java).",
+    "s": "Syllabus · VB.NET Keywords"
+  },
+  {
+    "t": "Overridable",
+    "d": "A base class method modifier that explicitly grants permission for derived child classes to override the method.",
+    "s": "Module 4 · Method Overriding"
+  },
+  {
+    "t": "Overrides",
+    "d": "A derived class method modifier that replaces an inherited Overridable base class method with specialized logic.",
+    "s": "Module 4 · Method Overriding"
+  },
+  {
+    "t": "MyBase.MethodName()",
+    "d": "Calls the base class's original version of an overridden method, allowing the child to extend rather than completely discard base behavior.",
+    "s": "Module 4 · Method Overriding"
+  },
+  {
+    "t": "Rules of Method Overriding",
+    "d": "1) Exact signature match (name, parameters, return type); 2) Parent must declare Overridable; 3) Private methods can never be overridden.",
+    "s": "Module 4 · Method Overriding"
+  }
 ];
-const DRILLS={mcq:[{m:"m1",q:"A class is best described as…",opts:["An instance of an object","A blueprint objects are created from","A Windows Form control","A type of loop"],a:1,why:"M1: the Class is the cookie cutter; the Object is the cookie made from it."},
-{m:"m1",q:"Which part of a class stores the object's data?",opts:["Properties","Methods","Fields","Constructors"],a:2,why:"M1: Fields are the private memory — like a car's color or a person's name."},
-{m:"m1",q:"When does the constructor (Sub New) run?",opts:["Every time a method is called","Once, when the object is created","When the form closes","Every time the property Set runs"],a:1,why:"M1: Sub New is the birth setup — it runs once at creation to set starting values."},
-{m:"m1",q:"In the Dog class, every new dog starts at age…",opts:["0","1","3","7"],a:1,why:"M1: the constructor sets _age = 1 — every new dog starts at age 1."},
-{m:"m1",q:"What is the difference between Bark() and GetHumanYears() in Dog?",opts:["Bark returns a value; GetHumanYears does not","Both return values","Bark is an action with no return; GetHumanYears is a Function that returns a value","There is no difference"],a:2,why:"M1: Sub = action, no return value. Function = calculation that returns a result."},
-{m:"m1",q:"myPet.Age = 3, then myPet.GetHumanYears() returns…",opts:["3","10","21","7"],a:2,why:"M1: GetHumanYears returns _age * 7 → 3 * 7 = 21 human years."},
-{m:"m1",q:"Dim myPet As New Dog(\"Bantay\") — then myPet.Name = \"Rex\" causes…",opts:["The dog is renamed to Rex","A compilation error — Name is ReadOnly","Nothing changes","An exception at runtime because the name is locked"],a:1,why:"M1: Name has only a Get (ReadOnly property), so it cannot be assigned from outside."},
-{m:"m1",q:"A Set block like 'If value > 0 Then _age = value' demonstrates…",opts:["A property validating data before accepting it","A constructor setting defaults","Method overriding","A Shared member"],a:0,why:"M1/M2: the Set is a safe door — it validates the incoming 'value' before storing it."},
-{m:"m2",q:"The pill capsule and TV remote are analogies for…",opts:["Inheritance","Encapsulation / information hiding","Looping","Method overriding"],a:1,why:"M2: data and methods wrapped in one shell; public buttons, hidden wiring."},
-{m:"m2",q:"Golden Rule part 1 says: always make variables…",opts:["Public","Protected","Private","Shared"],a:2,why:"M2: Rule 1 — variables Private. Rule 2 — methods/properties Public."},
-{m:"m2",q:"Form code executes myBank._moneyInside = 999. What happens?",opts:["The balance becomes 999","The balance becomes 0","An error — _moneyInside is Private and hidden","An infinite loop"],a:2,why:"M2: assigning a Private field directly from the form is not allowed — use the public methods."},
-{m:"m2",q:"PiggyBank starts at 0. After InsertMoney(50.0), CheckBalance() returns…",opts:["0","50.0","500.0","-50.0"],a:1,why:"M2: InsertMoney adds to _moneyInside, so the label shows Balance: P50."},
-{m:"m2",q:"StudentGrade's Set receives -5. What happens?",opts:["_grade becomes -5","MessageBox 'Error: A grade cannot be negative!' and _grade stays unchanged","_grade becomes 0","The program crashes"],a:1,why:"M2: the guard rejects the value — the field is only updated in the Else branch."},
-{m:"m2",q:"Inside a Set block, the keyword 'value' refers to…",opts:["The field's current value","The incoming value being assigned","The property name","The form control"],a:1,why:"M2: 'value' is the data the caller is trying to assign — that is what you validate."},
-{m:"m2",q:"Where should validation logic live?",opts:["In the button click event","Inside the class — in the property Set or method","In a loop on the form","In the form's Load event"],a:1,why:"M2 + Activity reminder: the class guards its own data; buttons hold no logic."},
-{m:"m3",q:"Which keyword makes one class inherit from another?",opts:["Implements","Inherits","Overrides","Extends"],a:1,why:"M3: Inherits is placed below the child class name."},
-{m:"m3",q:"A Protected member is visible to…",opts:["Only the same class","The same class and child classes, but not the form","Everywhere, including the form","Only the form"],a:1,why:"M3: Protected — same class ✓, child class ✓, Windows Form ✗."},
-{m:"m3",q:"Why does Manager's constructor call MyBase.New(name, salary)?",opts:["To delete the parent's constructor","To pass starting values up to the parent constructor","To override the parent","To make the class Shared"],a:1,why:"M3: MyBase.New sends the values up so the parent sets up the shared fields first."},
-{m:"m3",q:"New Manager(\"Carlo Reyes\", 20000.0, 5000.0) — ComputePay() returns…",opts:["20000","15000","25000","5000"],a:2,why:"M3: the override returns _baseSalary + _Allowance = 20,000 + 5,000 = 25,000."},
-{m:"m3",q:"Which of these is a correct IS-A relationship for inheritance?",opts:["Employee IS A Manager","Manager IS AN Employee","Dog IS A Cat","A form IS A class member"],a:1,why:"M3: Manager IS AN Employee — the child is a specific kind of the parent."},
-{m:"m3",q:"If Employee's ComputePay were NOT marked Overridable, Manager's Overrides version would…",opts:["Work normally","Silently ignore the override","Cause a compilation error — permission was never granted","Run twice"],a:2,why:"M3/M4: no Overrides without Overridable — permission is required."},
-{m:"m4",q:"Which keyword in the PARENT's method header gives overriding permission?",opts:["Overrides","Overridable","MyBase","NotInheritable"],a:1,why:"M4: Overridable goes on the parent header — it gives permission."},
-{m:"m4",q:"MyBase.MakeSound() inside an overridden method will…",opts:["Call the child's version again","Run the parent's original version first, then continue with your added steps","Skip the parent entirely","Compile error always"],a:1,why:"M4: MyBase.MethodName() runs the parent's original — like keeping the base adobo recipe, then adding steps."},
-{m:"m4",q:"New SeniorCustomer(\"Lolo Pedro\", 1000.0) — ComputeFinalBill() returns…",opts:["1000.0","1200.0","800.0","200.0"],a:2,why:"M4: discount = 1000 * 0.2 = 200 → bill = 1000 - 200 = 800."},
-{m:"m4",q:"Overriding rule 1 requires the child's method to have…",opts:["A different name","A matching signature — same name, parameter list, and return type","At least two parameters","The Shared keyword"],a:1,why:"M4: same dish name, customized steps — matching signature is rule 1."},
-{m:"m4",q:"Which methods can never be overridden?",opts:["Public methods","Protected methods","Private methods","Overridable methods"],a:2,why:"M4: Private methods cannot be overridden — Overridable must be Public or Protected."},
-{m:"m4",q:"Method overriding is VB.NET's example of…",opts:["Compile-time overloading","Runtime polymorphism","Encapsulation","Looping"],a:1,why:"Syllabus Ch 4: overriding gives runtime polymorphism — the object's own version runs at runtime."}],trace:[{m:"m1",kind:"output",q:"What does the MessageBox show?",code:`Dim myPet As New Dog("Bantay")
-myPet.Age = 3
-myPet.Bark()`,opts:["Bantay says: Arf! Arf!","The animal makes a sound.","Bantay says: Meow! Meow!","Nothing — the MessageBox is empty"],a:0,why:"M1: Bark() shows _name & \" says: Arf! Arf!\" — the name went through the constructor, the age through the Set."},
-{m:"m1",kind:"output",q:"What is displayed at the end?",code:`Dim myPet As New Dog("Bantay")
-myPet.Age = 3
-Dim calculatedAge As Integer = myPet.GetHumanYears()
-MessageBox.Show("Bantay is " & calculatedAge & " in human years")`,opts:["Bantay is 3 in human years","Bantay is 10 in human years","Bantay is 21 in human years","Bantay is 7 in human years"],a:2,why:"M1: GetHumanYears returns _age * 7 = 3 * 7 = 21."},
-{m:"m1",kind:"error",q:"Will this code work? If not, why?",code:`Dim myPet As New Dog("Bantay")
-myPet._name = "Rex"   ' direct assignment`,opts:["It works — fields are public by default","It fails — _name is Private and cannot be reached from the form","It works but shows a warning","It fails — you cannot assign strings"],a:1,why:"M1/M2: fields are Private. The form must go through the public property doors."},
-{m:"m2",kind:"output",q:"What does the label show after this button click?",code:`' myBank started with _moneyInside = 0
-myBank.InsertMoney(50.0)
-lblBalance.Text = "Balance: P" & myBank.CheckBalance()`,opts:["Balance: P0","Balance: P50","Balance: P500","Balance: P-50"],a:1,why:"M2: InsertMoney adds 50.00 to the Private field; CheckBalance returns it."},
-{m:"m2",kind:"output",q:"The form saves a grade of -5. What does the object do?",code:`Public Property StudentGrade() As Integer
-    Get
-        Return _grade
-    End Get
-    Set(value As Integer)
-        If value < 0 Then
-            MessageBox.Show("Error: A grade cannot be negative!")
-        Else
-            _grade = value
-        End If
-    End Set
-End Property`,opts:["_grade becomes -5","_grade becomes 0","A MessageBox appears and _grade stays unchanged","An exception stops the program"],a:2,why:"M2: the Set is a guard — negative values are rejected with a MessageBox and the field is never touched."},
-{m:"m2",kind:"error",q:"What is wrong with this design?",code:`Public Class Bank
-    Public _balance As Double   ' ← design smell
-
-    Public Function CheckBalance() As Double
-        Return _balance
-    End Function
-End Class`,opts:["Nothing is wrong","_balance should be Private with a validating property or method for changes","_balance should be a Function","CheckBalance should be Private"],a:1,why:"M2 Golden Rule: variables are always Private — a Public field lets any code corrupt the balance with no guard."},
-{m:"m3",kind:"output",q:"What do the two labels show?",code:`Dim emp As New Employee("Maria Santos", 15000.0)
-Dim mgr As New Manager("Carlo Reyes", 20000.0, 5000.0)
-
-lblRegular.Text = emp.EmployeeName & " Pay: P" & emp.ComputePay()
-lblManager.Text = mgr.EmployeeName & " Pay: P" & mgr.ComputePay()`,opts:["P15000 then P25000","P15000 then P20000","P20000 then P25000","P25000 then P25000"],a:0,why:"M3: the employee gets the base 15,000; the manager's override adds the 5,000 allowance to 20,000."},
-{m:"m3",kind:"error",q:"This child class will not compile. What is missing?",code:`Public Class Manager
-    Inherits Employee
-
-    Public Overrides Function ComputePay() As Double
-        Return _baseSalary + _Allowance
-    End Function
-End Class
-' In Employee.vb:  Public Function ComputePay() As Double ...`,opts:["Nothing — it compiles","Employee's ComputePay must be marked Overridable","Manager must use Shadows instead","_baseSalary must be Public"],a:1,why:"M3/M4: no Overrides without Overridable — the parent must grant permission. (Protected _baseSalary is fine for children.)"},
-{m:"m4",kind:"output",q:"All three buttons run MakeSound(). What appears, in order?",code:`Dim a As New Animal : a.MakeSound()
-Dim d As New Dog     : d.MakeSound()
-Dim c As New Cat     : c.MakeSound()`,opts:["The same sound three times","Animal sound, Dog says: Arf! Arf!, Cat says: Meow! Meow!","Cat says: Meow! Meow! three times","Nothing happens"],a:1,why:"M4: each object runs its own overridden version — that is runtime polymorphism."},
-{m:"m4",kind:"output",q:"What is Lolo Pedro's final bill?",code:`Dim senior As New SeniorCustomer("Lolo Pedro", 1000.0)
-lblSeniorBill.Text = "Senior Bill: P" & senior.ComputeFinalBill()`,opts:["Bill: P1000","Bill: P1200","Bill: P800","Bill: P200"],a:2,why:"M4: the override computes 20% discount = 200, then returns 1000 - 200 = 800."},
-{m:"m4",kind:"error",q:"Which version of a method can NOT be overridden?",code:`Public Class Customer
-    Private Sub Validate()   ' ...
-    End Sub
-End Class`,opts:["A Private method — Overridable must be Public or Protected","A Sub — only Functions can be overridden","A method with no parameters","All of them can"],a:0,why:"M4 rule 3: Private methods cannot be overridden — permission can only be granted on Public or Protected methods."}],complete:[{m:"m1",title:"Declare the constructor",code:`Public Class Dog
-    Private _name As String
-    Private _age As Integer
-
-    Public {{0}} New(startingName As String)
-        _name = startingName
-        _age = 1
-    End {{1}}
-End Class`,blanks:[{ans:"Sub",opts:["Sub","Function","Property"]},{ans:"Sub",opts:["Sub","Class","New"]}],why:"M1: the constructor is always Sub New — it runs once at object creation."},
-{m:"m1",title:"A property that can only be read",code:`Public {{0}} Property Name() As String
-    Get
-        Return _name
-    End Get
-End Property`,blanks:[{ans:"ReadOnly",opts:["ReadOnly","WriteOnly","Private"]}],why:"M1: ReadOnly = Get only. Outside code can read the name but never rename the dog."},
-{m:"m1",title:"The human-year formula",code:`Public Function GetHumanYears() As Integer
-    Return _age * {{0}}
-End Function`,blanks:[{ans:"7",opts:["7","3","21"]}],why:"M1: dog age * 7 — Bantay at 3 is 21 in human years."},
-{m:"m2",title:"Hide the data",code:`Public Class PiggyBank
-    {{0}} _moneyInside As Double = 0
-
-    Public Sub InsertMoney(amount As Double)
-        _moneyInside = _moneyInside + amount
-    End Sub
-End Class`,blanks:[{ans:"Private",opts:["Private","Public","Protected"]}],why:"M2 Golden Rule 1: variables are always Private — information hiding."},
-{m:"m2",title:"Guard the grade",code:`Set(value As Integer)
-    If value < 0 {{0}}
-        MessageBox.Show("Error: A grade cannot be negative!")
-    Else
-        _grade = value
-    End If
-End Set`,blanks:[{ans:"Then",opts:["Then","Do","End If"]}],why:"M2: If...Then — reject the negative value before it ever reaches the field."},
-{m:"m3",title:"Connect the child to its parent",code:`Public Class Student
-    {{0}} Person
-
-    Private _course As String
-End Class`,blanks:[{ans:"Inherits",opts:["Inherits","Implements","Overrides"]}],why:"M3: Inherits Person gives Student the parent's properties and methods."},
-{m:"m3",title:"Pass values up the family tree",code:`Public Sub New(name As String, salary As Double, allowance As Double)
-    MyBase.{{0}}(name, salary)
-    _Allowance = allowance
-End Sub`,blanks:[{ans:"New",opts:["New","ComputePay","Method"]}],why:"M3: MyBase.New(...) calls the parent's constructor with the shared starting values."},
-{m:"m4",title:"Grant permission (parent side)",code:`Public Class Animal
-    Public {{0}} Sub MakeSound()
-        MessageBox.Show("The animal makes a sound.")
-    End Sub
-End Class`,blanks:[{ans:"Overridable",opts:["Overridable","Overrides","NotOverridable"]}],why:"M4: Overridable on the PARENT header is what gives children permission."},
-{m:"m4",title:"Take the permission (child side)",code:`Public Class SeniorCustomer
-    Inherits Customer
-
-    Public {{0}} Function ComputeFinalBill() As Double
-        Dim discount As Double = _totalAmount * 0.2
-        Return _totalAmount - discount
-    End Function
-End Class`,blanks:[{ans:"Overrides",opts:["Overrides","Overridable","Inherits"]}],why:"M4: Overrides on the CHILD header replaces the parent's version — the senior discount."},
-{m:"m4",title:"Keep the base recipe, then add steps",code:`Public Overrides Sub MakeSound()
-    MyBase.{{0}}()   ' run the parent's original first
-    MessageBox.Show("(then the dog adds its own sound)")
-End Sub`,blanks:[{ans:"MakeSound",opts:["MakeSound","Animal","Sound"]}],why:"M4: MyBase.MethodName() runs the original version first — add coconut milk after."}]};
+const DRILLS = {
+  "mcq": [
+    {
+      "m": "m1",
+      "q": "In Object-Oriented Programming, a class is best described as…",
+      "opts": [
+        "An instance of an object in memory",
+        "A blueprint or template from which objects are created",
+        "A Windows Form UI control",
+        "A programmatic loop structure"
+      ],
+      "a": 1,
+      "why": "A Class is an abstract blueprint or data type definition in OOP that specifies the fields (data) and methods (behavior) an object will possess. An Object is a concrete instance instantiated from that class in memory."
+    },
+    {
+      "m": "m1",
+      "q": "Which part of a class stores the object's internal state and data?",
+      "opts": [
+        "Properties",
+        "Methods",
+        "Fields",
+        "Constructors"
+      ],
+      "a": 2,
+      "why": "Fields (member variables) serve as the private backing storage for an object's data. Properties provide controlled access doors to fields, Methods define executable actions, and Constructors handle initialization."
+    },
+    {
+      "m": "m1",
+      "q": "When does a class constructor (Sub New in VB.NET) execute?",
+      "opts": [
+        "Every time any method of the object is called",
+        "Once, at the exact moment the object is created with New",
+        "Automatically when the Windows Form closes",
+        "Every time a Property Set accessor is assigned"
+      ],
+      "a": 1,
+      "why": "In VB.NET, the constructor is declared as Sub New. It executes automatically and exactly once when a new instance is instantiated using the New keyword, setting up starting values for the object."
+    },
+    {
+      "m": "m1",
+      "q": "Given the constructor shown below, what is the initial value of _age for any newly created Dog object?",
+      "code": "Public Class Dog\n    Private _name As String\n    Private _age As Integer\n\n    Public Sub New(startingName As String)\n        _name = startingName\n        _age = 1   ' initial setup\n    End Sub\nEnd Class",
+      "opts": [
+        "0",
+        "1",
+        "3",
+        "7"
+      ],
+      "a": 1,
+      "why": "Inside Sub New, the constructor explicitly assigns _age = 1 upon creation. While uninitialized numeric fields in VB.NET default to 0, this constructor overrides the default by setting _age to 1."
+    },
+    {
+      "m": "m1",
+      "q": "In the methods shown below, what is the fundamental difference between Sub Bark() and Function GetHumanYears()?",
+      "code": "Public Sub Bark()\n    MessageBox.Show(\"Arf! Arf!\")\nEnd Sub\n\nPublic Function GetHumanYears() As Integer\n    Return _age * 7\nEnd Function",
+      "opts": [
+        "Bark returns a value; GetHumanYears does not",
+        "Both methods return values to the caller",
+        "Bark is a Sub (performs an action without returning a value), while GetHumanYears is a Function (returns a computed Integer)",
+        "There is no difference in return behavior between Sub and Function"
+      ],
+      "a": 2,
+      "why": "In VB.NET, a 'Sub' is a procedure that executes statements without returning any data to the caller. A 'Function' must specify a return type (As Integer) and uses Return to send a value back."
+    },
+    {
+      "m": "m1",
+      "q": "Given the property and function shown below, if calling code sets myPet.Age = 3, what does myPet.GetHumanYears() return?",
+      "code": "Public Property Age() As Integer\n    Get\n        Return _age\n    End Get\n    Set(value As Integer)\n        _age = value\n    End Set\nEnd Property\n\nPublic Function GetHumanYears() As Integer\n    Return _age * 7\nEnd Function",
+      "opts": [
+        "3",
+        "10",
+        "21",
+        "7"
+      ],
+      "a": 2,
+      "why": "Assigning myPet.Age = 3 sets the backing field _age to 3. When myPet.GetHumanYears() is subsequently called, it calculates Return _age * 7, which evaluates to 3 * 7 = 21."
+    },
+    {
+      "m": "m1",
+      "q": "Given the ReadOnly property declaration below, what happens if calling code attempts: myPet.Name = \"Rex\"?",
+      "code": "Public ReadOnly Property Name() As String\n    Get\n        Return _name\n    End Get\nEnd Property",
+      "opts": [
+        "The dog's name is successfully changed to Rex",
+        "A compilation error occurs because ReadOnly properties have no Set accessor",
+        "The assignment is silently ignored at runtime",
+        "A runtime null reference exception is thrown"
+      ],
+      "a": 1,
+      "why": "A ReadOnly property declares only a Get block and omits the Set block. The VB.NET compiler prevents assignment to ReadOnly properties and flags it as a compile-time error."
+    },
+    {
+      "m": "m1",
+      "q": "A property Set block structured as 'If value > 0 Then _age = value' demonstrates which OOP practice?",
+      "opts": [
+        "A property validating incoming data before accepting and storing it",
+        "A constructor establishing default field values",
+        "Method overriding across an inheritance hierarchy",
+        "A Shared class member declaration"
+      ],
+      "a": 0,
+      "why": "A Property Set block acts as a protective gateway. By wrapping assignment in 'If value > 0 Then', the class validates that incoming data meets business constraints before mutating private state."
+    },
+    {
+      "m": "m2",
+      "q": "Which core OOP principle is defined as bundling data (fields) and methods into a single unit while restricting direct external access to internal state?",
+      "opts": [
+        "Inheritance",
+        "Encapsulation (Information Hiding)",
+        "Method Overloading",
+        "Polymorphism"
+      ],
+      "a": 1,
+      "why": "Encapsulation combines data and the methods that operate on that data inside a class, using access modifiers like Private to hide internal implementation details (Information Hiding) and exposing only safe public interfaces."
+    },
+    {
+      "m": "m2",
+      "q": "Under standard Encapsulation principles in OOP, class member variables (fields) should generally be declared with which access modifier?",
+      "opts": [
+        "Public",
+        "Protected",
+        "Private",
+        "Shared"
+      ],
+      "a": 2,
+      "why": "Encapsulation dictates that member variables (fields) should be Private to prevent outside code from directly altering internal state without passing through validation logic in Public properties or methods."
+    },
+    {
+      "m": "m2",
+      "q": "In the scenario below, what happens when external form code attempts to execute myBank._moneyInside = 999?",
+      "code": "Public Class PiggyBank\n    Private _moneyInside As Double = 0\nEnd Class\n\n' In Form1.vb:\nDim myBank As New PiggyBank()\nmyBank._moneyInside = 999",
+      "opts": [
+        "The balance is updated to 999",
+        "The balance resets to 0",
+        "A compilation error occurs because _moneyInside is Private",
+        "A runtime exception halts execution"
+      ],
+      "a": 2,
+      "why": "Because _moneyInside is declared Private, it is completely invisible outside the PiggyBank class. External code like Form1 cannot access it, resulting in a compile-time error."
+    },
+    {
+      "m": "m2",
+      "q": "Given the PiggyBank class below, if _moneyInside starts at 0 and InsertMoney(50.0) is called, what does CheckBalance() return?",
+      "code": "Public Class PiggyBank\n    Private _moneyInside As Double = 0\n\n    Public Sub InsertMoney(amount As Double)\n        _moneyInside = _moneyInside + amount\n    End Sub\n\n    Public Function CheckBalance() As Double\n        Return _moneyInside\n    End Function\nEnd Class",
+      "opts": [
+        "0",
+        "50.0",
+        "500.0",
+        "-50.0"
+      ],
+      "a": 1,
+      "why": "Calling InsertMoney(50.0) adds 50.0 to _moneyInside (0 + 50.0 = 50.0). CheckBalance() then reads and returns the updated value of _moneyInside, which is 50.0."
+    },
+    {
+      "m": "m2",
+      "q": "Given the guarded property below, what occurs if calling code assigns student.StudentGrade = -5?",
+      "code": "Public Property StudentGrade() As Integer\n    Get\n        Return _grade\n    End Get\n    Set(value As Integer)\n        If value < 0 Then\n            MessageBox.Show(\"Error: A grade cannot be negative!\")\n        Else\n            _grade = value\n        End If\n    End Set\nEnd Property",
+      "opts": [
+        "_grade is updated to -5",
+        "A MessageBox displays 'Error: A grade cannot be negative!' and _grade remains unchanged",
+        "_grade is automatically reset to 0",
+        "The program crashes with an unhandled exception"
+      ],
+      "a": 1,
+      "why": "The Set block validates incoming values. Because -5 is less than 0, the 'If value < 0' condition evaluates to True: the error MessageBox is displayed and the Else block is skipped, leaving _grade untouched."
+    },
+    {
+      "m": "m2",
+      "q": "Inside a VB.NET Property Set block, what does the keyword 'value' represent?",
+      "opts": [
+        "The current existing value stored in the private field",
+        "The incoming data passed by the caller to be assigned to the property",
+        "The name of the property being accessed",
+        "A reference to the parent Windows Form control"
+      ],
+      "a": 1,
+      "why": "In VB.NET property accessors, 'value' is an implicit parameter representing the new data assigned to the property by the calling statement (e.g. In obj.Prop = 10, 'value' is 10)."
+    },
+    {
+      "m": "m2",
+      "q": "In an Object-Oriented application, where should business validation logic ideally be placed?",
+      "opts": [
+        "In the Windows Form button click event handlers",
+        "Inside the class itself (within property Set accessors or methods)",
+        "In a loop located on the Windows Form",
+        "In the Form_Load event handler"
+      ],
+      "a": 1,
+      "why": "Validation belongs inside the class (in property Set accessors or methods). This guarantees that the class protects its own data integrity regardless of whether input comes from a button, a file, or another class."
+    },
+    {
+      "m": "m3",
+      "q": "Which VB.NET keyword is placed directly beneath a child class header to inherit from a parent class?",
+      "opts": [
+        "Implements",
+        "Inherits",
+        "Overrides",
+        "Extends"
+      ],
+      "a": 1,
+      "why": "In VB.NET, inheritance is established using the 'Inherits' keyword placed on the line immediately following the child class header (e.g., Public Class Student \\n Inherits Person)."
+    },
+    {
+      "m": "m3",
+      "q": "A member declared with the Protected access modifier is accessible to…",
+      "opts": [
+        "Only the class where it is declared",
+        "The declaring class and its derived (child) classes, but NOT external classes like Windows Forms",
+        "Every class in the project, including Windows Forms",
+        "Only external Windows Forms"
+      ],
+      "a": 1,
+      "why": "The Protected access modifier provides access within the containing class and to any class derived from it (child classes), while keeping the member hidden from outside callers such as Windows Forms."
+    },
+    {
+      "m": "m3",
+      "q": "In the derived class constructor shown below, what is the role of MyBase.New(name, salary)?",
+      "code": "Public Class Manager\n    Inherits Employee\n\n    Public Sub New(name As String, salary As Double, allowance As Double)\n        MyBase.New(name, salary)\n        _Allowance = allowance\n    End Sub\nEnd Class",
+      "opts": [
+        "It deletes the base class constructor",
+        "It forwards required initialization values up to the parent (Employee) constructor",
+        "It overrides the base class constructor behavior",
+        "It turns the class into a Shared class"
+      ],
+      "a": 1,
+      "why": "MyBase.New(...) explicitly invokes the constructor of the base class (Employee). This ensures that the inherited fields are properly initialized by the parent class before the child class initializes its own fields."
+    },
+    {
+      "m": "m3",
+      "q": "Given the Employee and Manager classes below, what does ComputePay() return for New Manager(\"Carlo Reyes\", 20000.0, 5000.0)?",
+      "code": "Public Class Employee\n    Protected _empName As String\n    Protected _baseSalary As Double\n\n    Public Sub New(name As String, salary As Double)\n        _empName = name\n        _baseSalary = salary\n    End Sub\n\n    Public Overridable Function ComputePay() As Double\n        Return _baseSalary\n    End Function\nEnd Class\n\nPublic Class Manager\n    Inherits Employee\n    Private _Allowance As Double\n\n    Public Sub New(name As String, salary As Double, allowance As Double)\n        MyBase.New(name, salary)\n        _Allowance = allowance\n    End Sub\n\n    Public Overrides Function ComputePay() As Double\n        Return _baseSalary + _Allowance\n    End Function\nEnd Class",
+      "opts": [
+        "20000",
+        "15000",
+        "25000",
+        "5000"
+      ],
+      "a": 2,
+      "why": "Manager's constructor sets _baseSalary = 20000.0 (via MyBase.New) and _Allowance = 5000.0. Its overridden ComputePay() evaluates Return _baseSalary + _Allowance = 20000.0 + 5000.0 = 25000."
+    },
+    {
+      "m": "m3",
+      "q": "Which of the following represents a correct, valid IS-A inheritance relationship?",
+      "opts": [
+        "Employee IS A Manager (Employee inherits from Manager)",
+        "Manager IS AN Employee (Manager inherits from Employee)",
+        "Dog IS A Cat (Dog inherits from Cat)",
+        "Form IS A Class Member (Form inherits from Member)"
+      ],
+      "a": 1,
+      "why": "Inheritance represents an IS-A relationship where the child is a specialized kind of the parent. A Manager is an Employee (with extra managerial duties/allowance), so Manager inherits from Employee."
+    },
+    {
+      "m": "m3",
+      "q": "If Employee's ComputePay() method is NOT declared with Overridable, what happens when Manager attempts to use Overrides Function ComputePay()?",
+      "opts": [
+        "The code compiles and runs normally",
+        "The compiler ignores the Overrides keyword silently",
+        "A compilation error occurs because the base method did not grant override permission",
+        "ComputePay() executes twice in succession"
+      ],
+      "a": 2,
+      "why": "In VB.NET, methods are non-overridable by default. A child class cannot use the Overrides keyword unless the parent method explicitly includes the Overridable keyword in its declaration."
+    },
+    {
+      "m": "m4",
+      "q": "Which keyword must be declared in the BASE (parent) class method header to permit derived classes to override it?",
+      "opts": [
+        "Overrides",
+        "Overridable",
+        "MyBase",
+        "NotInheritable"
+      ],
+      "a": 1,
+      "why": "The Overridable keyword is placed in the base class method header to grant explicit permission for child classes to provide their own specialized implementation using Overrides."
+    },
+    {
+      "m": "m4",
+      "q": "When overriding a method in a child class, what is the effect of calling MyBase.MethodName() inside the overridden method?",
+      "opts": [
+        "It recursively calls the child's own overridden method",
+        "It executes the base class's original implementation of that method",
+        "It permanently disables the base class method",
+        "It causes an immediate compile-time error"
+      ],
+      "a": 1,
+      "why": "MyBase provides a reference to the base class. Calling MyBase.MethodName() executes the parent class's original code, allowing the child to extend rather than completely replace parent behavior."
+    },
+    {
+      "m": "m4",
+      "q": "Given the SeniorCustomer override below, what does ComputeFinalBill() return when _totalAmount is 1000.0?",
+      "code": "Public Class SeniorCustomer\n    Inherits Customer\n\n    Public Overrides Function ComputeFinalBill() As Double\n        Dim discount As Double = _totalAmount * 0.2\n        Return _totalAmount - discount\n    End Function\nEnd Class",
+      "opts": [
+        "1000.0",
+        "1200.0",
+        "800.0",
+        "200.0"
+      ],
+      "a": 2,
+      "why": "The override calculates discount = 1000.0 * 0.2 = 200.0. Subtracting this from _totalAmount gives 1000.0 - 200.0 = 800.0."
+    },
+    {
+      "m": "m4",
+      "q": "When overriding a method using the Overrides keyword in VB.NET, what rule must the child method strictly follow regarding its signature?",
+      "opts": [
+        "It must use a different method name than the parent",
+        "It must match the exact signature of the parent (same name, parameter count/types, and return type)",
+        "It must declare at least one additional parameter",
+        "It must include the Shared keyword in its header"
+      ],
+      "a": 1,
+      "why": "Method overriding requires an identical method signature: exactly the same name, parameter types, order, and return type. If the parameters differ, the method would be an overload, not an override."
+    },
+    {
+      "m": "m4",
+      "q": "Which type of methods in a base class can NEVER be marked Overridable or overridden by child classes?",
+      "opts": [
+        "Public methods",
+        "Protected methods",
+        "Private methods",
+        "Methods that return values (Functions)"
+      ],
+      "a": 2,
+      "why": "Private methods are completely hidden from child classes. Because derived classes cannot see or access Private members of a parent class, Private methods cannot be marked Overridable or overridden."
+    },
+    {
+      "m": "m4",
+      "q": "Method overriding in VB.NET is an implementation of which fundamental OOP concept?",
+      "opts": [
+        "Compile-time method overloading",
+        "Runtime polymorphism",
+        "Encapsulation of fields",
+        "Recursive iteration"
+      ],
+      "a": 1,
+      "why": "Method overriding enables runtime polymorphism: a single method call on a base-typed reference invokes the specialized implementation of whichever concrete derived object is actually present at runtime."
+    }
+  ],
+  "trace": [
+    {
+      "m": "m1",
+      "kind": "output",
+      "q": "What does the MessageBox display when this code runs?",
+      "code": "Public Class Dog\n    Private _name As String\n\n    Public Sub New(startingName As String)\n        _name = startingName\n    End Sub\n\n    Public Sub Bark()\n        MessageBox.Show(_name & \" says: Arf! Arf!\")\n    End Sub\nEnd Class\n\n' Execution:\nDim myPet As New Dog(\"Bantay\")\nmyPet.Bark()",
+      "opts": [
+        "Bantay says: Arf! Arf!",
+        "The animal makes a sound.",
+        "Bantay says: Meow! Meow!",
+        "Nothing — the MessageBox is empty"
+      ],
+      "a": 0,
+      "why": "The constructor sets _name = 'Bantay'. Calling Bark() concatenates _name with ' says: Arf! Arf!', displaying 'Bantay says: Arf! Arf!' in the MessageBox."
+    },
+    {
+      "m": "m1",
+      "kind": "output",
+      "q": "What is displayed in the MessageBox at the end of execution?",
+      "code": "Public Class Dog\n    Public Property Age As Integer\n\n    Public Function GetHumanYears() As Integer\n        Return Age * 7\n    End Function\nEnd Class\n\n' Execution:\nDim myPet As New Dog()\nmyPet.Age = 3\nDim calculatedAge As Integer = myPet.GetHumanYears()\nMessageBox.Show(\"Bantay is \" & calculatedAge & \" in human years\")",
+      "opts": [
+        "Bantay is 3 in human years",
+        "Bantay is 10 in human years",
+        "Bantay is 21 in human years",
+        "Bantay is 7 in human years"
+      ],
+      "a": 2,
+      "why": "myPet.Age is set to 3. GetHumanYears() evaluates Age * 7 = 3 * 7 = 21. The MessageBox displays 'Bantay is 21 in human years'."
+    },
+    {
+      "m": "m1",
+      "kind": "error",
+      "q": "Will this code compile and run? If not, why?",
+      "code": "Public Class Dog\n    Private _name As String\n\n    Public Sub New(startingName As String)\n        _name = startingName\n    End Sub\nEnd Class\n\n' In Form1.vb:\nDim myPet As New Dog(\"Bantay\")\nmyPet._name = \"Rex\"   ' Direct assignment from outside",
+      "opts": [
+        "It compiles and works — fields are public by default in classes",
+        "It fails to compile — _name is declared Private and cannot be accessed from Form1",
+        "It compiles with a warning and renames the dog",
+        "It fails at runtime with an invalid cast exception"
+      ],
+      "a": 1,
+      "why": "_name is declared with Private access modifier. External classes such as Form1 cannot access or mutate private members, resulting in a compile-time accessibility error."
+    },
+    {
+      "m": "m2",
+      "kind": "output",
+      "q": "What does lblBalance display after the button click finishes?",
+      "code": "Public Class PiggyBank\n    Private _moneyInside As Double = 0\n\n    Public Sub InsertMoney(amount As Double)\n        _moneyInside = _moneyInside + amount\n    End Sub\n\n    Public Function CheckBalance() As Double\n        Return _moneyInside\n    End Function\nEnd Class\n\n' Button click:\nDim myBank As New PiggyBank()\nmyBank.InsertMoney(50.0)\nlblBalance.Text = \"Balance: P\" & myBank.CheckBalance()",
+      "opts": [
+        "Balance: P0",
+        "Balance: P50",
+        "Balance: P500",
+        "Balance: P-50"
+      ],
+      "a": 1,
+      "why": "_moneyInside initializes to 0. InsertMoney(50.0) increases _moneyInside to 50.0. CheckBalance() returns 50, resulting in the label text 'Balance: P50'."
+    },
+    {
+      "m": "m2",
+      "kind": "output",
+      "q": "Given the guarded property below, what does the object do when assigned a grade of -5?",
+      "code": "Public Class Student\n    Private _grade As Integer = 0\n\n    Public Property StudentGrade() As Integer\n        Get\n            Return _grade\n        End Get\n        Set(value As Integer)\n            If value < 0 Then\n                MessageBox.Show(\"Error: A grade cannot be negative!\")\n            Else\n                _grade = value\n            End If\n        End Set\n    End Property\nEnd Class\n\n' Execution:\nDim student As New Student()\nstudent.StudentGrade = -5",
+      "opts": [
+        "_grade is updated to -5",
+        "_grade becomes 0",
+        "An error MessageBox appears and _grade remains unchanged",
+        "An unhandled exception crashes the application"
+      ],
+      "a": 2,
+      "why": "The Set block guards against negative input. Because -5 < 0 is True, the MessageBox is shown and the assignment in Else is skipped; _grade remains unchanged at its default (0)."
+    },
+    {
+      "m": "m2",
+      "kind": "error",
+      "q": "What critical OOP design flaw is present in this class?",
+      "code": "Public Class Bank\n    Public _balance As Double   ' Direct external access\n\n    Public Function CheckBalance() As Double\n        Return _balance\n    End Function\nEnd Class",
+      "opts": [
+        "Nothing is wrong — this is valid class design",
+        "_balance should be Private and accessed via a validating property or method to protect object state",
+        "_balance should be declared as a Function",
+        "CheckBalance must be declared Private"
+      ],
+      "a": 1,
+      "why": "Declaring _balance as Public violates Encapsulation and Information Hiding. Any external code can directly modify or corrupt the balance without validation or audit."
+    },
+    {
+      "m": "m3",
+      "kind": "output",
+      "q": "What values do the two labels display after execution?",
+      "code": "Public Class Employee\n    Protected _empName As String\n    Protected _baseSalary As Double\n\n    Public Sub New(name As String, salary As Double)\n        _empName = name\n        _baseSalary = salary\n    End Sub\n\n    Public ReadOnly Property EmployeeName() As String\n        Get\n            Return _empName\n        End Get\n    End Property\n\n    Public Overridable Function ComputePay() As Double\n        Return _baseSalary\n    End Function\nEnd Class\n\nPublic Class Manager\n    Inherits Employee\n    Private _Allowance As Double\n\n    Public Sub New(name As String, salary As Double, allowance As Double)\n        MyBase.New(name, salary)\n        _Allowance = allowance\n    End Sub\n\n    Public Overrides Function ComputePay() As Double\n        Return _baseSalary + _Allowance\n    End Function\nEnd Class\n\n' Execution:\nDim emp As New Employee(\"Maria Santos\", 15000.0)\nDim mgr As New Manager(\"Carlo Reyes\", 20000.0, 5000.0)\n\nlblRegular.Text = \"Pay: P\" & emp.ComputePay()\nlblManager.Text = \"Pay: P\" & mgr.ComputePay()",
+      "opts": [
+        "Pay: P15000 then Pay: P25000",
+        "Pay: P15000 then Pay: P20000",
+        "Pay: P20000 then Pay: P25000",
+        "Pay: P25000 then Pay: P25000"
+      ],
+      "a": 0,
+      "why": "emp.ComputePay() executes Employee's base method, returning 15000. mgr.ComputePay() executes Manager's overridden method, returning _baseSalary + _Allowance = 20000 + 5000 = 25000."
+    },
+    {
+      "m": "m3",
+      "kind": "error",
+      "q": "This derived class fails to compile. What is missing in the base class?",
+      "code": "Public Class Employee\n    Protected _baseSalary As Double\n\n    ' Missing keyword in base declaration:\n    Public Function ComputePay() As Double\n        Return _baseSalary\n    End Function\nEnd Class\n\nPublic Class Manager\n    Inherits Employee\n    Private _Allowance As Double\n\n    Public Overrides Function ComputePay() As Double\n        Return _baseSalary + _Allowance\n    End Function\nEnd Class",
+      "opts": [
+        "Nothing is wrong — the code is valid",
+        "Employee's ComputePay() must be declared with Overridable to grant permission to override",
+        "Manager must use the Implements keyword instead of Overrides",
+        "_baseSalary must be changed to Public"
+      ],
+      "a": 1,
+      "why": "In VB.NET, base class methods cannot be overridden unless they are explicitly declared with the Overridable keyword. Attempting to use Overrides on a non-Overridable base method produces a compile error."
+    },
+    {
+      "m": "m4",
+      "kind": "output",
+      "q": "When MakeSound() is called on all three objects, what appears in order?",
+      "code": "Public Class Animal\n    Public Overridable Sub MakeSound()\n        MessageBox.Show(\"The animal makes a sound.\")\n    End Sub\nEnd Class\n\nPublic Class Dog : Inherits Animal\n    Public Overrides Sub MakeSound()\n        MessageBox.Show(\"Dog says: Arf! Arf!\")\n    End Sub\nEnd Class\n\nPublic Class Cat : Inherits Animal\n    Public Overrides Sub MakeSound()\n        MessageBox.Show(\"Cat says: Meow! Meow!\")\n    End Sub\nEnd Class\n\n' Execution:\nDim a As New Animal : a.MakeSound()\nDim d As New Dog     : d.MakeSound()\nDim c As New Cat     : c.MakeSound()",
+      "opts": [
+        "The same animal sound three times in a row",
+        "'The animal makes a sound.', then 'Dog says: Arf! Arf!', then 'Cat says: Meow! Meow!'",
+        "'Cat says: Meow! Meow!' three times in a row",
+        "Nothing happens because subclasses cannot override Subs"
+      ],
+      "a": 1,
+      "why": "Through runtime polymorphism, each object executes its own specialized implementation of MakeSound(): the Animal instance displays the base message, while Dog and Cat display their respective overridden messages."
+    },
+    {
+      "m": "m4",
+      "kind": "output",
+      "q": "What is displayed in lblSeniorBill after ComputeFinalBill() runs?",
+      "code": "Public Class Customer\n    Protected _customerName As String\n    Protected _totalAmount As Double\n\n    Public Sub New(name As String, amount As Double)\n        _customerName = name\n        _totalAmount = amount\n    End Sub\n\n    Public Overridable Function ComputeFinalBill() As Double\n        Return _totalAmount\n    End Function\nEnd Class\n\nPublic Class SeniorCustomer\n    Inherits Customer\n\n    Public Sub New(name As String, amount As Double)\n        MyBase.New(name, amount)\n    End Sub\n\n    Public Overrides Function ComputeFinalBill() As Double\n        Dim discount As Double = _totalAmount * 0.2\n        Return _totalAmount - discount\n    End Function\nEnd Class\n\n' Execution:\nDim senior As New SeniorCustomer(\"Lolo Pedro\", 1000.0)\nlblSeniorBill.Text = \"Senior Bill: P\" & senior.ComputeFinalBill()",
+      "opts": [
+        "Senior Bill: P1000",
+        "Senior Bill: P1200",
+        "Senior Bill: P800",
+        "Senior Bill: P200"
+      ],
+      "a": 2,
+      "why": "The senior discount is 1000.0 * 0.2 = 200.0. The overridden ComputeFinalBill() returns 1000.0 - 200.0 = 800.0, which is formatted as 'Senior Bill: P800'."
+    },
+    {
+      "m": "m4",
+      "kind": "error",
+      "q": "Can a child class override the Validate() method shown below? Why or why not?",
+      "code": "Public Class Customer\n    Private Sub Validate()\n        ' Internal validation logic\n    End Sub\nEnd Class",
+      "opts": [
+        "No — Private methods are hidden from child classes and cannot be marked Overridable",
+        "Yes — all methods in VB.NET are overridable by default",
+        "Yes — provided the derived class uses the Shadows keyword instead",
+        "No — only Functions can be overridden in VB.NET, not Subs"
+      ],
+      "a": 0,
+      "why": "Private methods are completely hidden from other classes, including derived classes. Only Public or Protected methods can be declared Overridable and overridden by child classes."
+    }
+  ],
+  "complete": [
+    {
+      "m": "m1",
+      "title": "Declare the constructor",
+      "code": "Public Class Dog\n    Private _name As String\n    Private _age As Integer\n\n    Public {{0}} New(startingName As String)\n        _name = startingName\n        _age = 1\n    End {{1}}\nEnd Class",
+      "blanks": [
+        {
+          "ans": "Sub",
+          "opts": [
+            "Sub",
+            "Function",
+            "Property"
+          ]
+        },
+        {
+          "ans": "Sub",
+          "opts": [
+            "Sub",
+            "Class",
+            "New"
+          ]
+        }
+      ],
+      "why": "In VB.NET, constructors are declared as 'Public Sub New(...)' and terminated with 'End Sub'. A constructor never returns a value, so it is always a Sub."
+    },
+    {
+      "m": "m1",
+      "title": "A property that can only be read",
+      "code": "Public {{0}} Property Name() As String\n    Get\n        Return _name\n    End Get\nEnd Property",
+      "blanks": [
+        {
+          "ans": "ReadOnly",
+          "opts": [
+            "ReadOnly",
+            "WriteOnly",
+            "Private"
+          ]
+        }
+      ],
+      "why": "The ReadOnly modifier specifies that a property has only a Get accessor. Callers can read the property value, but cannot assign to it."
+    },
+    {
+      "m": "m1",
+      "title": "A function that computes and returns a value",
+      "code": "' Calculates human years from dog age:\nPublic {{0}} GetHumanYears() As Integer\n    Return _age * 7\nEnd {{1}}",
+      "blanks": [
+        {
+          "ans": "Function",
+          "opts": [
+            "Function",
+            "Sub",
+            "Property"
+          ]
+        },
+        {
+          "ans": "Function",
+          "opts": [
+            "Function",
+            "Sub",
+            "Class"
+          ]
+        }
+      ],
+      "why": "Any method in VB.NET that computes and returns a value (As Integer) must be declared as a 'Function' and closed with 'End Function'. Subs cannot return values."
+    },
+    {
+      "m": "m2",
+      "title": "Hide internal data with encapsulation",
+      "code": "Public Class PiggyBank\n    {{0}} _moneyInside As Double = 0\n\n    Public Sub InsertMoney(amount As Double)\n        _moneyInside = _moneyInside + amount\n    End Sub\nEnd Class",
+      "blanks": [
+        {
+          "ans": "Private",
+          "opts": [
+            "Private",
+            "Public",
+            "Protected"
+          ]
+        }
+      ],
+      "why": "Declaring fields as Private hides internal data from external modification (information hiding). Callers must use public methods to interact with the object."
+    },
+    {
+      "m": "m2",
+      "title": "Guard property data with validation",
+      "code": "Set(value As Integer)\n    If value < 0 {{0}}\n        MessageBox.Show(\"Error: A grade cannot be negative!\")\n    Else\n        _grade = value\n    End If\nEnd Set",
+      "blanks": [
+        {
+          "ans": "Then",
+          "opts": [
+            "Then",
+            "Do",
+            "End If"
+          ]
+        }
+      ],
+      "why": "In VB.NET, conditional statements begin with 'If condition Then'. This allows the Set block to check incoming values before storing them in private fields."
+    },
+    {
+      "m": "m3",
+      "title": "Connect the child to its parent class",
+      "code": "Public Class Student\n    {{0}} Person\n\n    Private _course As String\nEnd Class",
+      "blanks": [
+        {
+          "ans": "Inherits",
+          "opts": [
+            "Inherits",
+            "Implements",
+            "Overrides"
+          ]
+        }
+      ],
+      "why": "The 'Inherits' keyword is placed directly below the child class header to establish an inheritance relationship with the parent class (Person)."
+    },
+    {
+      "m": "m3",
+      "title": "Pass starting values to the parent constructor",
+      "code": "Public Sub New(name As String, salary As Double, allowance As Double)\n    MyBase.{{0}}(name, salary)\n    _Allowance = allowance\nEnd Sub",
+      "blanks": [
+        {
+          "ans": "New",
+          "opts": [
+            "New",
+            "ComputePay",
+            "Method"
+          ]
+        }
+      ],
+      "why": "MyBase.New(...) calls the constructor of the parent class, ensuring inherited fields are initialized before the child class initializes its own fields."
+    },
+    {
+      "m": "m4",
+      "title": "Grant permission to override (base class)",
+      "code": "Public Class Animal\n    Public {{0}} Sub MakeSound()\n        MessageBox.Show(\"The animal makes a sound.\")\n    End Sub\nEnd Class",
+      "blanks": [
+        {
+          "ans": "Overridable",
+          "opts": [
+            "Overridable",
+            "Overrides",
+            "NotOverridable"
+          ]
+        }
+      ],
+      "why": "The Overridable modifier on a base class method grants derived classes explicit permission to replace that method's implementation."
+    },
+    {
+      "m": "m4",
+      "title": "Provide specialized behavior (child class)",
+      "code": "Public Class SeniorCustomer\n    Inherits Customer\n\n    Public {{0}} Function ComputeFinalBill() As Double\n        Dim discount As Double = _totalAmount * 0.2\n        Return _totalAmount - discount\n    End Function\nEnd Class",
+      "blanks": [
+        {
+          "ans": "Overrides",
+          "opts": [
+            "Overrides",
+            "Overridable",
+            "Inherits"
+          ]
+        }
+      ],
+      "why": "The Overrides keyword in the derived class replaces the base class's implementation with specialized logic (such as applying a senior discount)."
+    },
+    {
+      "m": "m4",
+      "title": "Run the base implementation before adding steps",
+      "code": "Public Overrides Sub MakeSound()\n    MyBase.{{0}}()   ' execute base class logic first\n    MessageBox.Show(\"Dog adds its own bark!\")\nEnd Sub",
+      "blanks": [
+        {
+          "ans": "MakeSound",
+          "opts": [
+            "MakeSound",
+            "Animal",
+            "Sound"
+          ]
+        }
+      ],
+      "why": "MyBase.MakeSound() executes the parent class's original method first, allowing the child to extend rather than completely discard base functionality."
+    }
+  ]
+};
 const ACTIVITIES=[{file:"CS212-Activity",title:"VB.NET Programming Activity",badge:"Group work · 2 problems",
 intro:"Permanent class groupings · VB.NET Windows Forms application. Both problems practice encapsulation: Private fields guarded by Public properties and methods.",
 problems:[
