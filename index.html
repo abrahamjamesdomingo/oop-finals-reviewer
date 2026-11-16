@@ -737,13 +737,69 @@ problems:[
   "Expose it through a Public Property Grade whose Set accepts ONLY 0 to 100.",
   "Any other value shows a MessageBox 'Invalid Grade' and the field stays unchanged.",
   "Form: a TextBox for the grade, a Button to save, and a Label that displays the verified grade from the object."],
-  tests:["Test with: -5, 85, and 105 — only 85 should stick."]},
+  tests:["Test with: -5, 85, and 105 — only 85 should stick."],
+  answer:[
+   {file:"Student.vb",code:`Public Class Student
+    Private _grade As Integer
+
+    Public Property Grade() As Integer
+        Get
+            Return _grade
+        End Get
+        Set(value As Integer)
+            If value >= 0 And value <= 100 Then
+                _grade = value
+            Else
+                MessageBox.Show("Invalid Grade")
+            End If
+        End Set
+    End Property
+End Class`},
+   {file:"Form1.vb",code:`Public Class Form1
+    Private student As New Student()
+
+    Private Sub btnSaveGrade_Click(sender As Object, e As EventArgs) Handles btnSaveGrade.Click
+        student.Grade = Convert.ToInt32(txtGrade.Text)
+        lblGrade.Text = "Grade: " & student.Grade
+    End Sub
+End Class`}]},
  {title:"Problem 2 — ATM Withdrawal System",reqs:[
   "Create an Account class with a Private _balance (Double) initialized to 5000.00.",
   "Expose a Read-Only property CurrentBalance.",
   "Public Sub Withdraw(amount As Double): if amount > _balance show MessageBox 'Insufficient Funds'; otherwise deduct the amount and show 'Withdrawal Successful'.",
   "Form: a TextBox for the amount, a Button to withdraw, and a Label that constantly updates the CurrentBalance."],
-  tests:["Test with: 1000 (success) and 6000 (insufficient)."]}],
+  tests:["Test with: 1000 (success) and 6000 (insufficient)."],
+  answer:[
+   {file:"Account.vb",code:`Public Class Account
+    Private _balance As Double = 5000.00
+
+    Public ReadOnly Property CurrentBalance() As Double
+        Get
+            Return _balance
+        End Get
+    End Property
+
+    Public Sub Withdraw(amount As Double)
+        If amount > _balance Then
+            MessageBox.Show("Insufficient Funds")
+        Else
+            _balance -= amount
+            MessageBox.Show("Withdrawal Successful")
+        End If
+    End Sub
+End Class`},
+   {file:"Form1.vb",code:`Public Class Form1
+    Private account As New Account()
+
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        lblBalance.Text = "Balance: P" & account.CurrentBalance()
+    End Sub
+
+    Private Sub btnWithdraw_Click(sender As Object, e As EventArgs) Handles btnWithdraw.Click
+        account.Withdraw(Convert.ToDouble(txtAmount.Text))
+        lblBalance.Text = "Balance: P" & account.CurrentBalance()
+    End Sub
+End Class`}]}],
 reminders:["Use Private fields with Public properties/methods — encapsulation is the point.",
 "Do NOT put the logic in the button click — the class guards its own data.",
 "Record a video presentation: the group explains the code line by line and every member speaks.",
@@ -759,13 +815,121 @@ problems:[
   "Public Overridable Function ComputeBill() As Double — returns _baseFee.",
   "InPatient.vb: Inherits Patient; Private _daysAdmitted with Property DaysAdmitted (must be at least 1 — otherwise show an error MessageBox and default to 1).",
   "Sub New(name, fee, days) calls MyBase.New(name, fee), then sets DaysAdmitted = days.",
-  "Public Overrides Function ComputeBill() → _baseFee + (_daysAdmitted * 1500.0) — ₱1,500 per day."],tests:[]},
+  "Public Overrides Function ComputeBill() → _baseFee + (_daysAdmitted * 1500.0) — ₱1,500 per day."],
+   tests:[],
+   answer:[
+    {file:"Patient.vb",code:`Public Class Patient
+    Protected _patientName As String
+    Protected _baseFee As Double
+
+    Public Sub New(name As String, fee As Double)
+        _patientName = name
+        If fee < 0 Then
+            _baseFee = 0
+        Else
+            _baseFee = fee
+        End If
+    End Sub
+
+    Public ReadOnly Property PatientName() As String
+        Get
+            Return _patientName
+        End Get
+    End Property
+
+    Public Property BaseFee() As Double
+        Get
+            Return _baseFee
+        End Get
+        Set(value As Double)
+            If value < 0 Then
+                MessageBox.Show("Error: Base fee cannot be negative!")
+            Else
+                _baseFee = value
+            End If
+        End Set
+    End Property
+
+    Public Overridable Function ComputeBill() As Double
+        Return _baseFee
+    End Function
+End Class`},
+    {file:"InPatient.vb",code:`Public Class InPatient
+    Inherits Patient
+
+    Private _daysAdmitted As Integer
+
+    Public Property DaysAdmitted() As Integer
+        Get
+            Return _daysAdmitted
+        End Get
+        Set(value As Integer)
+            If value <= 0 Then
+                MessageBox.Show("Error: Days admitted must be at least 1.")
+                _daysAdmitted = 1
+            Else
+                _daysAdmitted = value
+            End If
+        End Set
+    End Property
+
+    Public Sub New(name As String, fee As Double, days As Integer)
+        MyBase.New(name, fee)
+        DaysAdmitted = days
+    End Sub
+
+    Public Overrides Function ComputeBill() As Double
+        Return _baseFee + (_daysAdmitted * 1500.0)
+    End Function
+End Class`}]},
  {title:"Member 2 — Out-Patient Specialist & Form Integrator",reqs:[
   "OutPatient.vb: Inherits Patient; Private _labFee with Property LabFee (non-negative, MessageBox on error).",
   "Sub New(name, fee, lab) calls MyBase.New(name, fee), then sets LabFee = lab.",
   "Public Overrides Function ComputeBill() → _baseFee + _labFee.",
   "Form1.vb: inputs for Patient Name, Base Fee, Days Admitted, Lab Fee.",
-  "Buttons 'Compute In-Patient Bill' and 'Compute Out-Patient Bill' show the patient name and total in a Label."],tests:[]}],
+  "Buttons 'Compute In-Patient Bill' and 'Compute Out-Patient Bill' show the patient name and total in a Label."],
+   tests:[],
+   answer:[
+    {file:"OutPatient.vb",code:`Public Class OutPatient
+    Inherits Patient
+
+    Private _labFee As Double
+
+    Public Property LabFee() As Double
+        Get
+            Return _labFee
+        End Get
+        Set(value As Double)
+            If value < 0 Then
+                MessageBox.Show("Error: Lab fee cannot be negative!")
+            Else
+                _labFee = value
+            End If
+        End Set
+    End Property
+
+    Public Sub New(name As String, fee As Double, lab As Double)
+        MyBase.New(name, fee)
+        LabFee = lab
+    End Sub
+
+    Public Overrides Function ComputeBill() As Double
+        Return _baseFee + _labFee
+    End Function
+End Class`},
+    {file:"Form1.vb",code:`Public Class Form1
+
+    Private Sub btnComputeInPatient_Click(sender As Object, e As EventArgs) Handles btnComputeInPatient.Click
+        Dim inPatient As New InPatient(txtName.Text, Convert.ToDouble(txtBaseFee.Text), Convert.ToInt32(txtDays.Text))
+        lblResult.Text = inPatient.PatientName & " - Total Bill: P" & inPatient.ComputeBill()
+    End Sub
+
+    Private Sub btnComputeOutPatient_Click(sender As Object, e As EventArgs) Handles btnComputeOutPatient.Click
+        Dim outPatient As New OutPatient(txtName.Text, Convert.ToDouble(txtBaseFee.Text), Convert.ToDouble(txtLabFee.Text))
+        lblResult.Text = outPatient.PatientName & " - Total Bill: P" & outPatient.ComputeBill()
+    End Sub
+End Class`}
+   ]}],
 reminders:["Live-test invalid inputs in the video: a negative fee and 0 days admitted.",
 "The pair explains the code line by line in a video presentation.",
 "Anti-plagiarism: no identical UI or code between pairs.",
@@ -781,13 +945,41 @@ parts:[
  {title:"Part 1 — Basic Order",pts:"10 pts · easy",reqs:[
   "Use a For...Next loop to buy 5 coffees at ₱3 each.",
   "Each iteration adds 'Coffee #[number] purchased.' to lstOutput.",
-  "After the loop, lblResult shows 'Total cost for 5 coffees: ₱15'."]},
+  "After the loop, lblResult shows 'Total cost for 5 coffees: ₱15'."],
+  answer:{file:"Form1.vb — Part 1",code:`Private Sub btnSimulate1_Click(sender As Object, e As EventArgs) Handles btnSimulate1.Click
+    lstOutput.Items.Clear()
+    Dim total As Double = 0
+
+    For i As Integer = 1 To 5
+        lstOutput.Items.Add("Coffee #" & i & " purchased.")
+        total += 3
+    Next
+
+    lblResult.Text = "Total cost for 5 coffees: ₱" & total
+End Sub`}},
  {title:"Part 2 — Loyalty Budget",pts:"20 pts · hard",reqs:[
   "Start with budget = 20 and coffeeCount = 0.",
   "While budget >= 3: increment coffeeCount.",
   "If coffeeCount Mod 3 = 0 the coffee is FREE (budget unchanged): 'Coffee #[number] is FREE! Remaining: ₱[amount]'.",
   "Otherwise subtract 3: 'Coffee #[number] purchased. Remaining: ₱[amount]'.",
-  "After the loop, lblResult shows 'Got [count] coffees. Leftover: ₱[amount]'."]}],
+  "After the loop, lblResult shows 'Got [count] coffees. Leftover: ₱[amount]'."],
+  answer:{file:"Form1.vb — Part 2",code:`Private Sub btnSimulate2_Click(sender As Object, e As EventArgs) Handles btnSimulate2.Click
+    lstOutput.Items.Clear()
+    Dim budget As Double = 20
+    Dim coffeeCount As Integer = 0
+
+    While budget >= 3
+        coffeeCount += 1
+        If coffeeCount Mod 3 = 0 Then
+            lstOutput.Items.Add("Coffee #" & coffeeCount & " is FREE! Remaining: ₱" & budget)
+        Else
+            budget -= 3
+            lstOutput.Items.Add("Coffee #" & coffeeCount & " purchased. Remaining: ₱" & budget)
+        End If
+    End While
+
+    lblResult.Text = "Got " & coffeeCount & " coffees. Leftover: ₱" & budget
+End Sub`}}],
 expected:`Coffee #1 purchased. Remaining: ₱17
 Coffee #2 purchased. Remaining: ₱14
 Coffee #3 is FREE! Remaining: ₱14
@@ -805,13 +997,42 @@ parts:[
  {title:"Part 1 — Weekly Steps",pts:"10 pts",reqs:[
   "Use a For...Next loop from 1 To 7.",
   "Each day appends 'Day [number]: Logged 1500 steps.' to txtOutput.",
-  "After the loop, lblStatus shows 'Total for week: 10500 steps'."]},
+  "After the loop, lblStatus shows 'Total for week: 10500 steps'."],
+  answer:{file:"Form1.vb — Part 1",code:`Private Sub btnRunEasy_Click(sender As Object, e As EventArgs) Handles btnRunEasy.Click
+    txtOutput.Clear()
+    Dim totalSteps As Integer = 0
+
+    For day As Integer = 1 To 7
+        txtOutput.AppendText("Day " & day & ": Logged 1500 steps." & Environment.NewLine)
+        totalSteps += 1500
+    Next
+
+    lblStatus.Text = "Total for week: " & totalSteps & " steps"
+End Sub`}},
  {title:"Part 2 — Calorie Burner",pts:"20 pts",reqs:[
   "Start with caloriesBurned = 0 and lapCount = 0.",
   "Loop (Do Until / While) while caloriesBurned < 400: increment lapCount.",
   "If lapCount Mod 4 = 0, add 65 (45 base + 20 bonus): 'Lap [number]: Bonus! Burned 65 cals. Total: [amount]'.",
   "Otherwise add 45: 'Lap [number]: Burned 45 cals. Total: [amount]'.",
-  "After the loop, lblStatus shows 'Goal reached in [count] laps!'."]}],
+  "After the loop, lblStatus shows 'Goal reached in [count] laps!'."],
+  answer:{file:"Form1.vb — Part 2",code:`Private Sub btnRunHard_Click(sender As Object, e As EventArgs) Handles btnRunHard.Click
+    txtOutput.Clear()
+    Dim caloriesBurned As Integer = 0
+    Dim lapCount As Integer = 0
+
+    Do Until caloriesBurned >= 400
+        lapCount += 1
+        If lapCount Mod 4 = 0 Then
+            caloriesBurned += 65
+            txtOutput.AppendText("Lap " & lapCount & ": Bonus! Burned 65 cals. Total: " & caloriesBurned & Environment.NewLine)
+        Else
+            caloriesBurned += 45
+            txtOutput.AppendText("Lap " & lapCount & ": Burned 45 cals. Total: " & caloriesBurned & Environment.NewLine)
+        End If
+    Loop
+
+    lblStatus.Text = "Goal reached in " & lapCount & " laps!"
+End Sub`}}],
 expected:`Lap 1: Burned 45 cals. Total: 45
 Lap 2: Burned 45 cals. Total: 90
 Lap 3: Burned 45 cals. Total: 135
@@ -831,7 +1052,7 @@ function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g
 function setStatus(t){$("#statusRight").textContent=t}
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 /* ---- VB syntax highlighter ---- */
-const RX=/('[^\n]*)|("(?:[^"\n])*")|\b(\d+(?:\.\d+)?)\b|\b(Public|Private|Protected|Class|Sub|Function|End|Inherits|Overrides|Overridable|NotOverridable|MyBase|Me|Dim|As|New|If|Then|Else|Return|While|Do|Loop|Until|For|Next|To|Mod|And|Or|Not|True|False|ReadOnly|WriteOnly|Property|Get|Set|Shared|ByVal)\b|\b(Integer|Double|String|Boolean|Decimal|Object|MessageBox|Dog|Cat|Animal|Person|Student|Employee|Manager|Customer|SeniorCustomer|PiggyBank|Bank|Account)\b/g;
+const RX=/('[^\n]*)|("(?:[^"\n])*")|\b(\d+(?:\.\d+)?)\b|\b(Public|Private|Protected|Class|Sub|Function|End|Inherits|Overrides|Overridable|NotOverridable|MyBase|Me|Dim|As|New|If|Then|Else|Return|While|Do|Loop|Until|For|Next|To|Mod|And|Or|Not|True|False|ReadOnly|WriteOnly|Property|Get|Set|Shared|ByVal|Handles|AndAlso)\b|\b(Integer|Double|String|Boolean|Decimal|Object|MessageBox|Dog|Cat|Animal|Person|Student|Employee|Manager|Customer|SeniorCustomer|PiggyBank|Bank|Account|Patient|InPatient|OutPatient|Convert|Environment)\b/g;
 function hl(c){return esc(c).replace(RX,(m,cm,st,n,k,t)=>
   cm?'<span class="c-com">'+cm+"</span>":
   st?'<span class="c-str">'+st+"</span>":
@@ -924,18 +1145,20 @@ function lessonView(id){
  viewEl.innerHTML=h;}
 function activitiesView(){
  setStatus("Activities");document.title="Activities — OOP Finals Reviewer";
- let h='<p class="kicker">From your course files</p><h1>Activities</h1><p class="lead">The actual activity briefs from the PDFs — requirements preserved as written. Attempt them in VB.NET before peeking at the modules.</p>';
+ let h='<p class="kicker">From your course files</p><h1>Activities</h1><p class="lead">The actual activity briefs from the PDFs — requirements preserved as written. Attempt them in VB.NET before peeking at the modules — each problem hides a full code-only answer.</p>';
  ACTIVITIES.forEach(a=>{h+='<div class="drill-top"><span class="badge teal">'+a.file+"</span><span class=\"badge\">"+a.badge+"</span></div><h2>"+a.title+"</h2><p>"+a.intro+"</p>";
   a.problems.forEach(p=>{h+='<div class="card"><h3>'+p.title+"</h3><ul>"+p.reqs.map(r=>"<li>"+r+"</li>").join("")+"</ul>";
-   if(p.tests&&p.tests.length)h+='<p style="margin-bottom:0"><span class="badge red">Must pass</span> '+p.tests.map(esc).join(" · ")+"</p>";h+="</div>"});
+   if(p.tests&&p.tests.length)h+='<p style="margin-bottom:0"><span class="badge red">Must pass</span> '+p.tests.map(esc).join(" · ")+"</p>";
+   if(p.answer&&p.answer.length)h+='<details class="reveal"><summary>Reveal answer — full VB.NET code (try it first!)</summary>'+p.answer.map(x=>codeBlock(x.file,x.code)).join("")+"</details>";
+   h+="</div>"});
   if(a.rubric)h+=tbl(a.rubric.title,a.rubric.head,a.rubric.rows);
   h+=callout("amber","Reminders","<ul>"+a.reminders.map(r=>"<li>"+r+"</li>").join("")+"</ul>")});
  viewEl.innerHTML=h;}
 function quizzesView(){
  setStatus("Looping Quizzes");document.title="Looping Quizzes — OOP Finals Reviewer";
- let h='<p class="kicker">Quiz 1 · Looping challenge · 30 points each</p><h1>Looping Challenges</h1><p class="lead">The two Quiz-1 sets, exactly as given. Trace them on paper first — then reveal the expected output.</p>';
+ let h='<p class="kicker">Quiz 1 · Looping challenge · 30 points each</p><h1>Looping Challenges</h1><p class="lead">The two Quiz-1 sets, exactly as given. Trace them on paper first — then reveal the expected output and the code-only answer.</p>';
  LOOPQUIZZES.forEach(q=>{h+='<div class="drill-top"><span class="badge teal">'+q.file+"</span><span class=\"badge\">"+q.badge+"</span></div><h2>"+q.title+"</h2><p>"+q.intro+"</p>";
-  q.parts.forEach(p=>{h+='<div class="card"><h3>'+p.title+' <span class="badge blue">'+p.pts+"</span></h3><ul>"+p.reqs.map(r=>"<li>"+r+"</li>").join("")+"</ul></div>"});
+  q.parts.forEach(p=>{h+='<div class="card"><h3>'+p.title+' <span class="badge blue">'+p.pts+"</span></h3><ul>"+p.reqs.map(r=>"<li>"+r+"</li>").join("")+"</ul>"+(p.answer?'<details class="reveal"><summary>Reveal answer — full VB.NET code (trace it yourself first!)</summary>'+codeBlock(p.answer.file,p.answer.code)+"</details>":"")+"</div>"});
   h+='<details class="reveal"><summary>Reveal expected output — try tracing first</summary><pre class="console">'+esc(q.expected)+"</pre></details>"});
  viewEl.innerHTML=h;}
 function practiceView(mode,filter){

@@ -1,5 +1,5 @@
 /* OOP Finals Reviewer — service worker: cache-first, offline-ready */
-const CACHE = "oop-reviewer-v1";
+const CACHE = "oop-reviewer-v2";
 const ASSETS = ["./", "./index.html", "./manifest.json", "./icon.svg"];
 
 self.addEventListener("install", (e) => {
