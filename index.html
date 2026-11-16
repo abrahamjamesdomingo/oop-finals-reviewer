@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#1E1E1E">
+<title>OOP Finals Reviewer — CS 212 VB.NET</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  color-scheme:dark;
+  --bg:#1E1E1E; --panel:#252526; --card:#2D2D30; --card2:#333336;
+  --border:#3E3E42; --border-soft:#333338;
+  --text:#D4D4D4; --bright:#FFFFFF; --muted:#A0A0A0;
+  --blue:#569CD6; --teal:#4EC9B0; --amber:#CE9178; --green:#89D185; --green-dim:#6A9955;
+  --red:#F48771; --yellow:#DCDCAA; --purple:#C586C0; --num:#B5CEA8;
+  --mono:'Cascadia Code','Consolas','Courier New',ui-monospace,SFMono-Regular,monospace;
+  --sans:system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  --radius:6px; --topbar-h:50px; --status-h:28px;
+}
+/* ============ RESET / BASE ============ */
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;
+  height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+ul{padding-left:1.25rem}
+li{margin:.3rem 0}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:3px}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important}
+}
+/* ============ TOP BAR ============ */
+.topbar{height:var(--topbar-h);background:var(--panel);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:.7rem;padding:0 .8rem;flex-shrink:0}
+.menu-btn{width:44px;height:44px;margin-left:-.6rem;display:flex;align-items:center;justify-content:center;border-radius:var(--radius);flex-shrink:0}
+.menu-btn:hover{background:var(--card2)}
+.menu-btn svg{width:20px;height:20px;fill:none;stroke:var(--text);stroke-width:2;stroke-linecap:round}
+.brand{font-family:var(--mono);font-size:.85rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand b{color:var(--bright);font-weight:600}
+.brand .acc{color:var(--teal)}
+/* ============ LAYOUT ============ */
+.shell{flex:1;display:flex;min-height:0;position:relative}
+.main{flex:1;overflow-y:auto;min-width:0;scroll-behavior:smooth}
+.view{max-width:860px;margin:0 auto;padding:1.4rem 1.1rem 3rem}
+/* ============ SIDEBAR (Solution Explorer) ============ */
+.scrim{display:none;position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:40}
+.sidebar{position:absolute;z-index:50;top:0;bottom:0;left:0;width:290px;background:var(--panel);
+  border-right:1px solid var(--border);transform:translateX(-105%);transition:transform .22s ease;
+  display:flex;flex-direction:column}
+.sidebar.open{transform:translateX(0)}
+.scrim.show{display:block}
+.side-head{display:flex;align-items:center;justify-content:space-between;
+  padding:.9rem 1rem .5rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted)}
+.side-close{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius)}
+.side-close:hover{background:var(--card2)}
+.side-close svg{width:18px;height:18px;stroke:var(--text);stroke-width:2;fill:none;stroke-linecap:round}
+.nav{overflow-y:auto;padding:.25rem .5rem 1.5rem}
+.nav-group{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);padding:1rem .5rem .35rem}
+.nav a{display:block;padding:.5rem .6rem;border-radius:var(--radius);
+  color:var(--text);font-size:.92rem;line-height:1.35;min-height:44px}
+.nav a:hover{background:var(--card2);text-decoration:none}
+.nav a.active{background:var(--card2);color:var(--bright);box-shadow:inset 2px 0 0 var(--blue)}
+.nav a .fi{font-family:var(--mono);font-size:.72rem;color:var(--yellow);display:block;margin-bottom:.1rem}
+.nav a.active .fi{color:var(--blue)}
+.nav a .sub{display:block;font-size:.72rem;color:var(--muted);margin-top:.15rem}
+@media (min-width:900px){
+  .sidebar{position:static;transform:none;width:290px;flex-shrink:0}
+  .menu-btn,.side-close,.scrim{display:none!important}
+}
+/* ============ TYPO / HEADINGS ============ */
+h1{font-family:var(--mono);font-size:1.45rem;line-height:1.3;color:var(--bright);font-weight:600;margin:.2rem 0 .4rem}
+h2{font-family:var(--mono);font-size:1.05rem;color:var(--bright);font-weight:600;margin:2rem 0 .7rem;
+  padding-top:1.2rem;border-top:1px solid var(--border-soft)}
+h2:first-of-type{border-top:none}
+h3{font-family:var(--mono);font-size:.95rem;color:var(--yellow);font-weight:600;margin:1.4rem 0 .5rem}
+p{margin:.6rem 0}
+.kicker{font-family:var(--mono);font-size:.75rem;color:var(--muted);letter-spacing:.05em;margin-bottom:.2rem}
+.lead{color:var(--text);font-size:1rem}
+/* ============ BADGES / CHIPS ============ */
+.badge{display:inline-block;font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;
+  padding:.15rem .55rem;border-radius:999px;border:1px solid var(--border);color:var(--muted);vertical-align:middle}
+.badge.blue{color:var(--blue);border-color:var(--blue)}
+.badge.teal{color:var(--teal);border-color:var(--teal)}
+.badge.amber{color:var(--amber);border-color:var(--amber)}
+.badge.red{color:var(--red);border-color:var(--red)}
+.badge.green{color:var(--green);border-color:var(--green-dim)}
+.badge.dim{opacity:.55}
+/* ============ CARDS & GRIDS ============ */
+.card{background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius);padding:1rem 1.1rem;margin:.8rem 0}
+.card h3{margin-top:0}
+.grid2{display:grid;grid-template-columns:1fr;gap:.7rem;margin:.9rem 0}
+@media (min-width:640px){.grid2{grid-template-columns:1fr 1fr}}
+.tiles{display:grid;grid-template-columns:1fr;gap:.7rem;margin:1rem 0}
+@media (min-width:640px){.tiles{grid-template-columns:1fr 1fr}}
+.tile{display:block;background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius);
+  padding:.9rem 1rem;color:var(--text);min-height:44px}
+.tile:hover{border-color:var(--blue);text-decoration:none;background:var(--card2)}
+.tile .t-file{font-family:var(--mono);font-size:.78rem;color:var(--yellow);display:block}
+.tile .t-title{color:var(--bright);font-weight:600;font-size:.95rem}
+.tile .t-desc{font-size:.8rem;color:var(--muted);display:block;margin-top:.15rem}
+/* ============ CALLOUTS ============ */
+.callout{border:1px solid var(--border);border-left:3px solid var(--blue);background:var(--card);
+  border-radius:var(--radius);padding:.8rem 1rem;margin:.9rem 0}
+.callout .co-title{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
+  display:block;margin-bottom:.25rem;color:var(--blue)}
+.callout.teal{border-left-color:var(--teal)}.callout.teal .co-title{color:var(--teal)}
+.callout.amber{border-left-color:var(--amber)}.callout.amber .co-title{color:var(--amber)}
+.callout.green{border-left-color:var(--green-dim)}.callout.green .co-title{color:var(--green)}
+.callout.red{border-left-color:var(--red)}.callout.red .co-title{color:var(--red)}
+.callout p{margin:.35rem 0}
+/* ============ CODE BLOCKS ============ */
+.code{background:#1a1a1a;border:1px solid var(--border-soft);border-radius:var(--radius);margin:1rem 0;overflow:hidden}
+.code-tab{display:flex;align-items:center;gap:.5rem;background:var(--panel);border-bottom:1px solid var(--border);
+  padding:.4rem .8rem;font-family:var(--mono);font-size:.78rem;color:var(--text)}
+.code-tab .dot{width:9px;height:9px;border-radius:50%;background:var(--teal);flex-shrink:0}
+.code-tab .lang{margin-left:auto;font-size:.62rem;color:var(--bg);background:var(--blue);padding:.05rem .4rem;border-radius:3px;font-weight:700}
+.code-body{display:block;padding:.8rem .6rem;font-family:var(--mono);font-size:.8rem;line-height:1.55;
+  overflow-x:auto;counter-reset:line;color:#d4d4d4}
+.cl{display:block;counter-increment:line;padding-left:3.1rem;position:relative;white-space:pre}
+.cl::before{content:counter(line);position:absolute;left:0;width:2.3rem;text-align:right;color:#5a5a5a;user-select:none}
+.c-key{color:var(--blue)} .c-str{color:var(--amber)} .c-com{color:var(--green-dim);font-style:italic}
+.c-typ{color:var(--teal)} .c-num{color:var(--num)}
+/* ============ TABLES ============ */
+.twrap{overflow-x:auto;margin:1rem 0;border:1px solid var(--border-soft);border-radius:var(--radius)}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:.85rem}
+th,td{padding:.55rem .8rem;text-align:left;border-bottom:1px solid var(--border-soft)}
+th{font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);background:var(--panel)}
+tr:last-child td{border-bottom:none}
+td.yes{color:var(--green);font-weight:600} td.no{color:var(--red)}
+/* ============ CONCEPT MAP ============ */
+.cmap{display:flex;flex-direction:column;gap:0;margin:1.2rem 0;align-items:stretch}
+.cmap .node{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:.7rem 1rem;font-family:var(--mono);font-size:.85rem;color:var(--bright)}
+.cmap .node small{display:block;font-family:var(--sans);color:var(--muted);font-size:.75rem}
+.cmap .link{align-self:center;font-family:var(--mono);font-size:.7rem;color:var(--teal);padding:.3rem 0 .3rem 0;text-align:center}
+.cmap .link::before{content:"↓";display:block;font-size:.85rem;color:var(--muted)}
+@media (min-width:760px){
+  .cmap{flex-direction:row;align-items:center;justify-content:flex-start;gap:.4rem}
+  .cmap .node{flex:1}
+  .cmap .link::before{content:"→"}
+  .cmap .link{padding:0 .2rem}
+}
+/* ============ DRILLS ============ */
+.drill-top{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin:1rem 0 .4rem}
+.progress-chip{font-family:var(--mono);font-size:.75rem;color:var(--muted);background:var(--panel);
+  border:1px solid var(--border);border-radius:999px;padding:.25rem .8rem}
+.pbar{flex:1;min-width:120px;height:6px;background:var(--card2);border-radius:3px;overflow:hidden}
+.pbar i{display:block;height:100%;background:var(--blue);transition:width .2s ease}
+.qcard{background:var(--card);border:1px solid var(--border-soft);border-radius:var(--radius);padding:1.1rem;margin:.9rem 0}
+.qtext{color:var(--bright);font-weight:600;margin:.4rem 0 .8rem;font-size:1rem}
+.opt{display:flex;align-items:flex-start;gap:.6rem;width:100%;text-align:left;min-height:48px;
+  background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);
+  padding:.7rem .9rem;margin:.45rem 0;font-size:.92rem;transition:border-color .15s ease}
+.opt:hover:enabled{border-color:var(--blue)}
+.opt .ol{font-family:var(--mono);color:var(--muted);flex-shrink:0}
+.opt.correct{border-color:var(--green);background:rgba(137,209,133,.09)}
+.opt.wrong{border-color:var(--red);background:rgba(244,135,113,.09)}
+.opt:disabled{cursor:default;opacity:.85}
+.feedback{border-radius:var(--radius);padding:.75rem 1rem;margin:.8rem 0;font-size:.9rem;display:none}
+.feedback.ok{display:block;background:rgba(137,209,133,.09);border:1px solid var(--green-dim)}
+.feedback.bad{display:block;background:rgba(244,135,113,.09);border:1px solid var(--red)}
+.feedback b{font-family:var(--mono)}
+.btn{display:inline-flex;align-items:center;gap:.45rem;min-height:44px;padding:.55rem 1.2rem;
+  border-radius:var(--radius);border:1px solid var(--border);background:var(--card2);
+  color:var(--bright);font-size:.9rem;font-weight:600;transition:background .15s ease}
+.btn:hover{background:#3d3d40}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#1a1a1a}
+.btn.primary:hover{background:#6aa5dd}
+.btn.ghost{background:transparent}
+.score-card{text-align:center;padding:2rem 1rem}
+.score-card .big{font-family:var(--mono);font-size:2.4rem;color:var(--bright);font-weight:700}
+/* ============ FLASHCARDS ============ */
+.fc-wrap{perspective:1200px;margin:1rem 0}
+.fc{position:relative;width:100%;min-height:210px;cursor:pointer;transform-style:preserve-3d;
+  transition:transform .45s ease}
+.fc.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:1.2rem;text-align:center}
+.fc-back{transform:rotateY(180deg);justify-content:flex-start}
+.fc-front .term{font-family:var(--mono);font-size:1.25rem;color:var(--bright);font-weight:700}
+.fc-front .hint{position:absolute;bottom:.7rem;font-size:.7rem;color:var(--muted)}
+.fc-back .src{position:absolute;bottom:.7rem;font-family:var(--mono);font-size:.68rem;color:var(--muted)}
+.fc-back .def{margin-top:2.2rem;font-size:.95rem;color:var(--text)}
+.fc-nav{display:flex;gap:.6rem;justify-content:center;margin-top:1rem;flex-wrap:wrap}
+/* ============ COMPLETE THE CODE ============ */
+.blank{font-family:var(--mono);background:var(--panel);border:1px dashed var(--muted);border-radius:4px;
+  padding:.3rem .5rem;margin:0 .15rem;color:var(--bright);min-width:3.2rem;min-height:26px;display:inline-block;
+  text-align:center;line-height:1.2;vertical-align:middle;cursor:pointer}
+.blank.selected{border-color:var(--blue);border-style:solid;box-shadow:0 0 0 1px var(--blue)}
+.blank.ok{border-color:var(--green);border-style:solid;color:var(--green)}
+.blank.bad{border-color:var(--red);border-style:solid;color:var(--red)}
+.bank{display:flex;flex-wrap:wrap;gap:.5rem;margin:.8rem 0}
+.chip{font-family:var(--mono);font-size:.8rem;background:var(--card2);border:1px solid var(--border);
+  border-radius:999px;padding:.4rem .9rem;min-height:44px;display:inline-flex;align-items:center;color:var(--bright);
+  cursor:pointer}
+.chip:hover{border-color:var(--blue)}
+.comp-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.6rem}
+/* ============ REVEAL / CONSOLE ============ */
+details.reveal{border:1px solid var(--border-soft);border-radius:var(--radius);margin:.8rem 0;background:var(--card)}
+details.reveal summary{cursor:pointer;padding:.7rem 1rem;font-family:var(--mono);font-size:.8rem;color:var(--blue);min-height:44px;display:flex;align-items:center}
+details.reveal summary:hover{color:var(--bright)}
+.console{background:#141414;border-top:1px solid var(--border-soft);padding:.8rem 1rem;
+  font-family:var(--mono);font-size:.78rem;line-height:1.6;color:var(--green);white-space:pre-wrap;margin:0}
+/* ============ STATUS BAR ============ */
+.statusbar{height:var(--status-h);background:#007ACC;background:#265a86;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;padding:0 .9rem;
+  font-family:var(--mono);font-size:.7rem;color:#e8f2fa;flex-shrink:0;gap:1rem}
+.statusbar .right{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.85}
+@media (max-width:520px){.statusbar .right{display:none}}
+/* ============ A11Y & TOUCH ============ */
+html{-webkit-tap-highlight-color:transparent}
+body{touch-action:manipulation}
+a,button,summary{touch-action:manipulation}
+h1,h2,h3{text-wrap:balance}
+p{text-wrap:pretty}
+.progress-chip,.fc-count,.badge,.big{font-variant-numeric:tabular-nums}
+.sidebar{overscroll-behavior:contain}
+.statusbar{padding-bottom:env(safe-area-inset-bottom)}
+.skip{position:absolute;left:-9999px;top:0;z-index:200;background:var(--blue);color:#fff;
+  padding:.6rem 1rem;border-radius:0 0 var(--radius) 0;font-family:var(--mono);font-size:.8rem}
+.skip:focus{left:0}
+@media print{.topbar,.sidebar,.scrim,.statusbar{display:none}body{height:auto;overflow:visible}.main{overflow:visible}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Open navigation menu" aria-expanded="false">
+    <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+  <div class="brand"><b>OOP Finals Reviewer</b> <span class="acc">—</span> CS 212 <span class="acc">·</span> VB.NET</div>
+</header>
+<div class="shell">
+  <div class="scrim" id="scrim"></div>
+  <a class="skip" href="#view">Skip to content</a>
+<nav class="sidebar" id="sidebar" aria-label="Solution Explorer">
+    <div class="side-head"><span>Solution Explorer</span>
+      <button class="side-close" id="sideClose" aria-label="Close navigation menu">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="nav" id="nav"></div>
+  </nav>
+  <main class="main" id="main">
+    <div class="view" id="view" tabindex="-1"></div>
+  </main>
+</div>
+<footer class="statusbar">
+  <span>CS 212 · Object Oriented Programming (VB.NET) · Written exam prep</span>
+  <span class="right" id="statusRight"></span>
+</footer>
+
+<script>
+"use strict";
+/* ================= DATA ================= */
+const MODULES=[
+{id:"m1",file:"Dog.vb",title:"Classes & Objects",tag:"Module 1 · Ch 1",
+analogy:{title:"The cookie cutter",text:"A Class is like a cookie cutter — it defines the shape. An Object is an actual cookie made from that cutter. One cutter, many cookies: one class, many objects."},
+intro:["A class bundles data and behavior into one blueprint. Every object you create from it gets its own copy of the data defined by the class.",
+"In VB.NET, a class has four parts, and each part has one job. Learn the four parts and you can read almost any class."],
+parts:[
+ {name:"1. Fields",role:"Private memory",text:"Variables that hold the object's data — like a car's color or a person's name. Kept Private so outside code cannot reach in directly."},
+ {name:"2. Constructor (Sub New)",role:"Birth setup",text:"Runs once, the moment the object is created. Its job is to set starting values."},
+ {name:"3. Properties",role:"Safe doors",text:"Public Get/Set accessors — the safe 'doors' to the private fields. They can validate before allowing a change."},
+ {name:"4. Behaviors (Methods)",role:"Actions",text:"Sub = an action with no return value (a dog barks). Function = a calculation that returns a result."}],
+examples:[
+ {file:"Dog.vb",code:`Public Class Dog
+    Private _name As String
+    Private _age As Integer
+
+    Public Sub New(startingName As String)
+        _name = startingName
+        _age = 1   ' every new dog starts at age 1
+    End Sub
+
+    Public ReadOnly Property Name() As String
+        Get
+            Return _name
+        End Get
+    End Property
+
+    Public Property Age() As Integer
+        Get
+            Return _age
+        End Get
+        Set(value As Integer)
+            If value > 0 Then
+                _age = value
+            End If
+        End Set
+    End Property
+
+    Public Sub Bark()
+        MessageBox.Show(_name & " says: Arf! Arf!")
+    End Sub
+
+    Public Function GetHumanYears() As Integer
+        Return _age * 7
+    End Function
+End Class`,happened:[
+ "_name and _age are Fields — hidden inside the object.",
+ "Sub New is the Constructor: a new Dog gets its name and automatically starts at age 1.",
+ "Name is ReadOnly — it has a Get but no Set, so nobody outside can rename the dog.",
+ "Age has a Get and a Set; the Set only accepts values greater than 0.",
+ "Bark is a Sub (action, no return). GetHumanYears is a Function (returns _age * 7)."]},
+ {file:"Form1.vb",code:`Dim myPet As New Dog("Bantay")
+myPet.Age = 3
+myPet.Bark()
+
+Dim calculatedAge As Integer = myPet.GetHumanYears()
+MessageBox.Show("Bantay is " & calculatedAge & " in human years")`,happened:[
+ "New Dog(\"Bantay\") creates the object — the constructor runs once and _age = 1.",
+ "myPet.Age = 3 goes through the property's Set; 3 > 0 so it is accepted.",
+ "Bark() shows the MessageBox: Bantay says: Arf! Arf!",
+ "GetHumanYears() returns 3 * 7 = 21 — Bantay is 21 in human years."]}],
+tables:[],
+summary:["Class = blueprint; Object = an instance created from it.","Fields = hidden data.","Constructor (Sub New) = birth setup, runs once.","Properties = Get/Set doors that can validate.","Methods = Subs (actions) and Functions (calculations that return a value)."]},
+
+{id:"m2",file:"PiggyBank.vb",title:"Encapsulation",tag:"Module 2 · Ch 3",
+analogy:{title:"The pill capsule & TV remote",text:"A capsule wraps medicine inside one shell — encapsulation wraps data and methods inside one class. A TV remote exposes only public buttons while the wiring stays hidden — Private fields are the wiring nobody should touch."},
+intro:["Encapsulation = wrapping variables and the methods that operate on them together inside one class.",
+"Information hiding = making the data Private so it can only be changed through safe, validating doors."],
+goldenRule:["Rule 1 — always make your variables Private.","Rule 2 — always make your Methods and Properties Public."],
+parts:[],
+examples:[
+ {file:"PiggyBank.vb",code:`Public Class PiggyBank
+    Private _moneyInside As Double = 0
+
+    Public Sub InsertMoney(amount As Double)
+        _moneyInside = _moneyInside + amount
+    End Sub
+
+    Public Function CheckBalance() As Double
+        Return _moneyInside
+    End Function
+End Class`,happened:[
+ "_moneyInside is Private — no form code can set it directly.",
+ "The only ways in are InsertMoney and CheckBalance.",
+ "If form code tried myBank._moneyInside = 999 it would cause an error — the field is hidden."]},
+ {file:"Form1.vb",code:`Private Sub btnDeposit_Click(sender As Object, e As EventArgs) Handles btnDeposit.Click
+    myBank.InsertMoney(50.0)
+    lblBalance.Text = "Balance: P" & myBank.CheckBalance()
+End Sub`,happened:[
+ "The button deposits 50.00 through the public method.",
+ "The label then shows: Balance: P50.",
+ "Notice the button holds no logic about the balance — the class guards its own data."]},
+ {file:"Student.vb",code:`Public Class Student
+    Private _grade As Integer
+
+    Public Property StudentGrade() As Integer
+        Get
+            Return _grade
+        End Get
+        Set(value As Integer)
+            If value < 0 Then
+                MessageBox.Show("Error: A grade cannot be negative!")
+            Else
+                _grade = value
+            End If
+        End Set
+    End Property
+End Class`,happened:[
+ "The Set block is a guard: a negative value is rejected with a MessageBox.",
+ "Rejected values never touch _grade — the field stays unchanged.",
+ "Form code reads txtGradeInput, converts with Convert.ToInt32, then assigns newStudent.StudentGrade — validation happens inside the class, not in the button."]}],
+tables:[],
+summary:["Encapsulation = wrapping variables + methods in one class.","Information hiding = Private fields.","Public methods and properties are the safe way to interact.","The Set block is where validation lives."]},
+{id:"m3",file:"Person.vb",title:"Inheritance",tag:"Module 3 · Ch 2",
+analogy:{title:"The family tree",text:"A child inherits traits from a parent, then develops skills of their own. In code, a derived class inherits the members of a base class and adds its own."},
+intro:["Inheritance = a new class built on an existing class. The child automatically reuses everything the parent does not keep private.",
+"You already know these IS-A relationships: Student IS A Person. SavingsAccount IS A BankAccount. Manager IS AN Employee."],
+parts:[],
+termsTable:{title:"Inheritance terminology",head:["Term","What it means"],rows:[
+ ["Base Class (parent)","The class that shares its members with its children."],
+ ["Derived Class (child)","The class that inherits from the base and adds its own members."],
+ ["Inherits","The keyword placed under the child class name."],
+ ["Protected","Hidden from the Windows Form, but child classes can use it directly."],
+ ["MyBase.New(...)","How a child constructor passes starting values up to the parent constructor."],
+ ["Overridable / Overrides","Parent grants permission; child replaces the method with its own version."]]},
+examples:[
+ {file:"Person.vb",code:`Public Class Person
+    Protected _name As String
+    Protected _age As Integer
+
+    Public Property Name() As String
+        Get
+            Return _name
+        End Get
+        Set(value As String)
+            _name = value
+        End Set
+    End Property
+
+    Public Property Age() As Integer
+        Get
+            Return _age
+        End Get
+        Set(value As Integer)
+            If value > 0 Then
+                _age = value
+            Else
+                MessageBox.Show("Error: Age must be positive!")
+            End If
+        End Set
+    End Property
+
+    Public Function GetBasicInfo() As String
+        Return "Name: " & _name & " | Age: " & _age
+    End Function
+End Class`,happened:[
+ "_name and _age are Protected, not Private — hidden from the form, but visible to child classes.",
+ "Age's Set guards against non-positive values.",
+ "GetBasicInfo returns Name: ... | Age: ... from the parent's own fields."]},
+ {file:"Student.vb",code:`Public Class Student
+    Inherits Person
+
+    Private _course As String
+
+    Public Property Course() As String
+        Get
+            Return _course
+        End Get
+        Set(value As String)
+            _course = value
+        End Set
+    End Property
+
+    Public Sub Study()
+        MessageBox.Show(_name & " is studying for " & _course & ".")
+    End Sub
+End Class`,happened:[
+ "Inherits Person gives Student the parent's Name, Age and GetBasicInfo for free.",
+ "Student only declares what is new: _course, the Course property, and Study().",
+ "Study() uses Protected _name directly — only a child class can do that; the form cannot."]},
+ {file:"Employee.vb + Manager.vb",code:`Public Class Employee
+    Protected _empName As String
+    Protected _baseSalary As Double
+
+    Public Sub New(name As String, salary As Double)
+        _empName = name
+        If salary < 0 Then
+            _baseSalary = 0
+        Else
+            _baseSalary = salary
+        End If
+    End Sub
+
+    Public ReadOnly Property EmployeeName() As String
+        Get
+            Return _empName
+        End Get
+    End Property
+
+    Public Overridable Function ComputePay() As Double
+        Return _baseSalary
+    End Function
+End Class
+
+Public Class Manager
+    Inherits Employee
+
+    Private _Allowance As Double
+
+    Public Sub New(name As String, salary As Double, allowance As Double)
+        MyBase.New(name, salary)
+        _Allowance = allowance
+    End Sub
+
+    Public Overrides Function ComputePay() As Double
+        Return _baseSalary + _Allowance
+    End Function
+End Class`,happened:[
+ "Employee's constructor rejects a negative salary by storing 0.",
+ "Manager's constructor calls MyBase.New(name, salary) so the parent sets up the shared fields first.",
+ "Manager overrides ComputePay to return _baseSalary + _Allowance."]},
+ {file:"Form1.vb",code:`Dim emp As New Employee("Maria Santos", 15000.0)
+Dim mgr As New Manager("Carlo Reyes", 20000.0, 5000.0)
+
+lblRegular.Text = emp.EmployeeName & " Pay: P" & emp.ComputePay()
+lblManager.Text = mgr.EmployeeName & " Pay: P" & mgr.ComputePay()`,happened:[
+ "The employee's pay: ₱15,000 — the base version runs.",
+ "The manager's pay: ₱25,000 — the overridden version runs (20,000 + 5,000)."]}],
+accessTable:{title:"Access modifiers — who can use what",head:["Modifier","Same class","Child class","Windows Form"],rows:[
+ ["Private",{y:1},{n:1},{n:1}],
+ ["Protected",{y:1},{y:1},{n:1}],
+ ["Public",{y:1},{y:1},{y:1}]]},
+summary:["Inherits reuses the parent's non-private members.","Protected is for parent fields used by children.","MyBase.New sends starting values up to the parent constructor.","Overridable + Overrides let a child customize inherited behavior."]},
+
+{id:"m4",file:"Animal.vb",title:"Method Overriding",tag:"Module 4 · Ch 4",
+analogy:{title:"The family adobo recipe",text:"A parent passes down an adobo recipe. The child keeps the dish's name — CookAdobo — but customizes the steps, like adding coconut milk. Same signature, new behavior."},
+intro:["Method overriding = a child class replaces an inherited method with its own version, keeping the same name and signature.",
+"Three keywords run the whole show:"],
+kwTable:{title:"The three keywords",head:["Keyword","Where it goes","What it does"],rows:[
+ ["Overridable","Parent method header","Gives permission to override."],
+ ["Overrides","Child method header","Replaces the parent's version."],
+ ["MyBase.MethodName()","Inside the child's method (optional)","Runs the parent's original first — add steps on top."]]},
+parts:[],
+examples:[
+ {file:"Animal.vb",code:`Public Class Animal
+    Public Overridable Sub MakeSound()
+        MessageBox.Show("The animal makes a sound.")
+    End Sub
+End Class
+
+Public Class Dog
+    Inherits Animal
+    Public Overrides Sub MakeSound()
+        MessageBox.Show("Dog says: Arf! Arf!")
+    End Sub
+End Class
+
+Public Class Cat
+    Inherits Animal
+    Public Overrides Sub MakeSound()
+        MessageBox.Show("Cat says: Meow! Meow!")
+    End Sub
+End Class`,happened:[
+ "Animal grants permission with Overridable.",
+ "Dog and Cat each answer with Overrides — same name, same shape, new behavior.",
+ "Calling MakeSound() on each object runs that object's own version: the animal makes a sound, Dog says: Arf! Arf!, Cat says: Meow! Meow!"]},
+ {file:"Customer.vb + SeniorCustomer.vb",code:`Public Class Customer
+    Protected _customerName As String
+    Protected _totalAmount As Double
+
+    Public Sub New(name As String, amount As Double)
+        _customerName = name
+        _totalAmount = amount
+    End Sub
+
+    Public Overridable Function ComputeFinalBill() As Double
+        Return _totalAmount
+    End Function
+End Class
+
+Public Class SeniorCustomer
+    Inherits Customer
+
+    Public Sub New(name As String, amount As Double)
+        MyBase.New(name, amount)
+    End Sub
+
+    Public Overrides Function ComputeFinalBill() As Double
+        Dim discount As Double = _totalAmount * 0.2
+        Return _totalAmount - discount
+    End Function
+End Class`,happened:[
+ "The base version just returns the total amount.",
+ "The senior version computes a 20% discount, then subtracts it."]},
+ {file:"Form1.vb",code:`Dim reg As New Customer("Ana Lopez", 1000.0)
+Dim senior As New SeniorCustomer("Lolo Pedro", 1000.0)
+
+lblRegularBill.Text = "Regular Bill: P" & reg.ComputeFinalBill()
+lblSeniorBill.Text = "Senior Bill: P" & senior.ComputeFinalBill()`,happened:[
+ "Ana Lopez's bill: ₱1,000 — no discount.",
+ "Lolo Pedro's bill: ₱800 — the override applies 1,000 - 200."]}],
+rules:{title:"The three rules of overriding",items:[
+ "Match the signature — same method name, same parameter list, same return type.",
+ "Permission required — you cannot use Overrides unless the parent marked the method Overridable.",
+ "Private methods cannot be overridden — an Overridable method must be Public or Protected."]},
+summary:["Overridable = permission (parent).","Overrides = replacement (child).","MyBase.MethodName() = run the original first, then add steps.","Overriding is VB.NET's runtime polymorphism in action."]}
+];
+const FLASHCARDS=[
+{t:"Class",d:"The blueprint or template. Objects are created from it.",s:"M1 · cookie cutter"},
+{t:"Object",d:"An instance of a class — a 'cookie' made from the cutter.",s:"M1"},
+{t:"Fields",d:"Private variables inside a class that store its data.",s:"M1 · hidden memory"},
+{t:"Constructor — Sub New",d:"Runs once when the object is created; sets starting values.",s:"M1 · birth setup"},
+{t:"Properties",d:"Public Get/Set 'doors' that safely expose private fields.",s:"M1"},
+{t:"ReadOnly property",d:"Has only a Get block — it can be read from outside but never assigned.",s:"M1 · e.g. Dog.Name"},
+{t:"Sub vs Function",d:"Sub = action, returns nothing. Function = calculation, returns a value.",s:"M1 · Bark vs GetHumanYears"},
+{t:"Encapsulation",d:"Wrapping variables and the methods that use them together in one class shell.",s:"M2 · pill capsule"},
+{t:"Information hiding",d:"Keeping fields Private so outside code cannot break the internals.",s:"M2 · TV remote wires"},
+{t:"Golden Rule of encapsulation",d:"Variables are always Private; methods and properties are always Public.",s:"M2"},
+{t:"Get / Set accessors",d:"Get returns the field's value; Set validates and assigns using the 'value' keyword.",s:"M2"},
+{t:"Why encapsulate?",d:"Invalid data gets rejected at the door — the object protects itself.",s:"M2 · grade guard"},
+{t:"Inheritance",d:"A child class reuses the members of a parent class using Inherits.",s:"M3 · family tree"},
+{t:"Base class",d:"The parent class that shares its members with its children.",s:"M3"},
+{t:"Derived class",d:"The child class that inherits from the base and adds its own members.",s:"M3"},
+{t:"IS-A relationship",d:"Student IS A Person; SavingsAccount IS A BankAccount; Manager IS AN Employee.",s:"M3"},
+{t:"Protected",d:"Hidden from the Windows Form, but child classes can use it directly.",s:"M3"},
+{t:"MyBase.New(...)",d:"Called in the child's constructor to pass starting values up to the parent's constructor.",s:"M3"},
+{t:"Shared member",d:"Belongs to the class itself rather than to each object instance.",s:"Syllabus Ch 1"},
+{t:"Me",d:"VB.NET's keyword for the current instance — like 'this' in other languages.",s:"Syllabus Ch 1"},
+{t:"Overridable",d:"Marks a parent method as overridable — permission granted.",s:"M4 · parent header"},
+{t:"Overrides",d:"Marks the child's method as replacing the parent's version.",s:"M4 · child header"},
+{t:"MyBase.MethodName()",d:"Optional: runs the parent's original version first, then you add steps on top.",s:"M4 · adobo + coconut milk"},
+{t:"Three overriding rules",d:"Match the signature; the parent must be Overridable; Private methods can never be overridden.",s:"M4"}
+];
+const DRILLS={mcq:[{m:"m1",q:"A class is best described as…",opts:["An instance of an object","A blueprint objects are created from","A Windows Form control","A type of loop"],a:1,why:"M1: the Class is the cookie cutter; the Object is the cookie made from it."},
+{m:"m1",q:"Which part of a class stores the object's data?",opts:["Properties","Methods","Fields","Constructors"],a:2,why:"M1: Fields are the private memory — like a car's color or a person's name."},
+{m:"m1",q:"When does the constructor (Sub New) run?",opts:["Every time a method is called","Once, when the object is created","When the form closes","Every time the property Set runs"],a:1,why:"M1: Sub New is the birth setup — it runs once at creation to set starting values."},
+{m:"m1",q:"In the Dog class, every new dog starts at age…",opts:["0","1","3","7"],a:1,why:"M1: the constructor sets _age = 1 — every new dog starts at age 1."},
+{m:"m1",q:"What is the difference between Bark() and GetHumanYears() in Dog?",opts:["Bark returns a value; GetHumanYears does not","Both return values","Bark is an action with no return; GetHumanYears is a Function that returns a value","There is no difference"],a:2,why:"M1: Sub = action, no return value. Function = calculation that returns a result."},
+{m:"m1",q:"myPet.Age = 3, then myPet.GetHumanYears() returns…",opts:["3","10","21","7"],a:2,why:"M1: GetHumanYears returns _age * 7 → 3 * 7 = 21 human years."},
+{m:"m1",q:"Dim myPet As New Dog(\"Bantay\") — then myPet.Name = \"Rex\" causes…",opts:["The dog is renamed to Rex","A compilation error — Name is ReadOnly","Nothing changes","An exception at runtime because the name is locked"],a:1,why:"M1: Name has only a Get (ReadOnly property), so it cannot be assigned from outside."},
+{m:"m1",q:"A Set block like 'If value > 0 Then _age = value' demonstrates…",opts:["A property validating data before accepting it","A constructor setting defaults","Method overriding","A Shared member"],a:0,why:"M1/M2: the Set is a safe door — it validates the incoming 'value' before storing it."},
+{m:"m2",q:"The pill capsule and TV remote are analogies for…",opts:["Inheritance","Encapsulation / information hiding","Looping","Method overriding"],a:1,why:"M2: data and methods wrapped in one shell; public buttons, hidden wiring."},
+{m:"m2",q:"Golden Rule part 1 says: always make variables…",opts:["Public","Protected","Private","Shared"],a:2,why:"M2: Rule 1 — variables Private. Rule 2 — methods/properties Public."},
+{m:"m2",q:"Form code executes myBank._moneyInside = 999. What happens?",opts:["The balance becomes 999","The balance becomes 0","An error — _moneyInside is Private and hidden","An infinite loop"],a:2,why:"M2: assigning a Private field directly from the form is not allowed — use the public methods."},
+{m:"m2",q:"PiggyBank starts at 0. After InsertMoney(50.0), CheckBalance() returns…",opts:["0","50.0","500.0","-50.0"],a:1,why:"M2: InsertMoney adds to _moneyInside, so the label shows Balance: P50."},
+{m:"m2",q:"StudentGrade's Set receives -5. What happens?",opts:["_grade becomes -5","MessageBox 'Error: A grade cannot be negative!' and _grade stays unchanged","_grade becomes 0","The program crashes"],a:1,why:"M2: the guard rejects the value — the field is only updated in the Else branch."},
+{m:"m2",q:"Inside a Set block, the keyword 'value' refers to…",opts:["The field's current value","The incoming value being assigned","The property name","The form control"],a:1,why:"M2: 'value' is the data the caller is trying to assign — that is what you validate."},
+{m:"m2",q:"Where should validation logic live?",opts:["In the button click event","Inside the class — in the property Set or method","In a loop on the form","In the form's Load event"],a:1,why:"M2 + Activity reminder: the class guards its own data; buttons hold no logic."},
+{m:"m3",q:"Which keyword makes one class inherit from another?",opts:["Implements","Inherits","Overrides","Extends"],a:1,why:"M3: Inherits is placed below the child class name."},
+{m:"m3",q:"A Protected member is visible to…",opts:["Only the same class","The same class and child classes, but not the form","Everywhere, including the form","Only the form"],a:1,why:"M3: Protected — same class ✓, child class ✓, Windows Form ✗."},
+{m:"m3",q:"Why does Manager's constructor call MyBase.New(name, salary)?",opts:["To delete the parent's constructor","To pass starting values up to the parent constructor","To override the parent","To make the class Shared"],a:1,why:"M3: MyBase.New sends the values up so the parent sets up the shared fields first."},
+{m:"m3",q:"New Manager(\"Carlo Reyes\", 20000.0, 5000.0) — ComputePay() returns…",opts:["20000","15000","25000","5000"],a:2,why:"M3: the override returns _baseSalary + _Allowance = 20,000 + 5,000 = 25,000."},
+{m:"m3",q:"Which of these is a correct IS-A relationship for inheritance?",opts:["Employee IS A Manager","Manager IS AN Employee","Dog IS A Cat","A form IS A class member"],a:1,why:"M3: Manager IS AN Employee — the child is a specific kind of the parent."},
+{m:"m3",q:"If Employee's ComputePay were NOT marked Overridable, Manager's Overrides version would…",opts:["Work normally","Silently ignore the override","Cause a compilation error — permission was never granted","Run twice"],a:2,why:"M3/M4: no Overrides without Overridable — permission is required."},
+{m:"m4",q:"Which keyword in the PARENT's method header gives overriding permission?",opts:["Overrides","Overridable","MyBase","NotInheritable"],a:1,why:"M4: Overridable goes on the parent header — it gives permission."},
+{m:"m4",q:"MyBase.MakeSound() inside an overridden method will…",opts:["Call the child's version again","Run the parent's original version first, then continue with your added steps","Skip the parent entirely","Compile error always"],a:1,why:"M4: MyBase.MethodName() runs the parent's original — like keeping the base adobo recipe, then adding steps."},
+{m:"m4",q:"New SeniorCustomer(\"Lolo Pedro\", 1000.0) — ComputeFinalBill() returns…",opts:["1000.0","1200.0","800.0","200.0"],a:2,why:"M4: discount = 1000 * 0.2 = 200 → bill = 1000 - 200 = 800."},
+{m:"m4",q:"Overriding rule 1 requires the child's method to have…",opts:["A different name","A matching signature — same name, parameter list, and return type","At least two parameters","The Shared keyword"],a:1,why:"M4: same dish name, customized steps — matching signature is rule 1."},
+{m:"m4",q:"Which methods can never be overridden?",opts:["Public methods","Protected methods","Private methods","Overridable methods"],a:2,why:"M4: Private methods cannot be overridden — Overridable must be Public or Protected."},
+{m:"m4",q:"Method overriding is VB.NET's example of…",opts:["Compile-time overloading","Runtime polymorphism","Encapsulation","Looping"],a:1,why:"Syllabus Ch 4: overriding gives runtime polymorphism — the object's own version runs at runtime."}],trace:[{m:"m1",kind:"output",q:"What does the MessageBox show?",code:`Dim myPet As New Dog("Bantay")
+myPet.Age = 3
+myPet.Bark()`,opts:["Bantay says: Arf! Arf!","The animal makes a sound.","Bantay says: Meow! Meow!","Nothing — the MessageBox is empty"],a:0,why:"M1: Bark() shows _name & \" says: Arf! Arf!\" — the name went through the constructor, the age through the Set."},
+{m:"m1",kind:"output",q:"What is displayed at the end?",code:`Dim myPet As New Dog("Bantay")
+myPet.Age = 3
+Dim calculatedAge As Integer = myPet.GetHumanYears()
+MessageBox.Show("Bantay is " & calculatedAge & " in human years")`,opts:["Bantay is 3 in human years","Bantay is 10 in human years","Bantay is 21 in human years","Bantay is 7 in human years"],a:2,why:"M1: GetHumanYears returns _age * 7 = 3 * 7 = 21."},
+{m:"m1",kind:"error",q:"Will this code work? If not, why?",code:`Dim myPet As New Dog("Bantay")
+myPet._name = "Rex"   ' direct assignment`,opts:["It works — fields are public by default","It fails — _name is Private and cannot be reached from the form","It works but shows a warning","It fails — you cannot assign strings"],a:1,why:"M1/M2: fields are Private. The form must go through the public property doors."},
+{m:"m2",kind:"output",q:"What does the label show after this button click?",code:`' myBank started with _moneyInside = 0
+myBank.InsertMoney(50.0)
+lblBalance.Text = "Balance: P" & myBank.CheckBalance()`,opts:["Balance: P0","Balance: P50","Balance: P500","Balance: P-50"],a:1,why:"M2: InsertMoney adds 50.00 to the Private field; CheckBalance returns it."},
+{m:"m2",kind:"output",q:"The form saves a grade of -5. What does the object do?",code:`Public Property StudentGrade() As Integer
+    Get
+        Return _grade
+    End Get
+    Set(value As Integer)
+        If value < 0 Then
+            MessageBox.Show("Error: A grade cannot be negative!")
+        Else
+            _grade = value
+        End If
+    End Set
+End Property`,opts:["_grade becomes -5","_grade becomes 0","A MessageBox appears and _grade stays unchanged","An exception stops the program"],a:2,why:"M2: the Set is a guard — negative values are rejected with a MessageBox and the field is never touched."},
+{m:"m2",kind:"error",q:"What is wrong with this design?",code:`Public Class Bank
+    Public _balance As Double   ' ← design smell
+
+    Public Function CheckBalance() As Double
+        Return _balance
+    End Function
+End Class`,opts:["Nothing is wrong","_balance should be Private with a validating property or method for changes","_balance should be a Function","CheckBalance should be Private"],a:1,why:"M2 Golden Rule: variables are always Private — a Public field lets any code corrupt the balance with no guard."},
+{m:"m3",kind:"output",q:"What do the two labels show?",code:`Dim emp As New Employee("Maria Santos", 15000.0)
+Dim mgr As New Manager("Carlo Reyes", 20000.0, 5000.0)
+
+lblRegular.Text = emp.EmployeeName & " Pay: P" & emp.ComputePay()
+lblManager.Text = mgr.EmployeeName & " Pay: P" & mgr.ComputePay()`,opts:["P15000 then P25000","P15000 then P20000","P20000 then P25000","P25000 then P25000"],a:0,why:"M3: the employee gets the base 15,000; the manager's override adds the 5,000 allowance to 20,000."},
+{m:"m3",kind:"error",q:"This child class will not compile. What is missing?",code:`Public Class Manager
+    Inherits Employee
+
+    Public Overrides Function ComputePay() As Double
+        Return _baseSalary + _Allowance
+    End Function
+End Class
+' In Employee.vb:  Public Function ComputePay() As Double ...`,opts:["Nothing — it compiles","Employee's ComputePay must be marked Overridable","Manager must use Shadows instead","_baseSalary must be Public"],a:1,why:"M3/M4: no Overrides without Overridable — the parent must grant permission. (Protected _baseSalary is fine for children.)"},
+{m:"m4",kind:"output",q:"All three buttons run MakeSound(). What appears, in order?",code:`Dim a As New Animal : a.MakeSound()
+Dim d As New Dog     : d.MakeSound()
+Dim c As New Cat     : c.MakeSound()`,opts:["The same sound three times","Animal sound, Dog says: Arf! Arf!, Cat says: Meow! Meow!","Cat says: Meow! Meow! three times","Nothing happens"],a:1,why:"M4: each object runs its own overridden version — that is runtime polymorphism."},
+{m:"m4",kind:"output",q:"What is Lolo Pedro's final bill?",code:`Dim senior As New SeniorCustomer("Lolo Pedro", 1000.0)
+lblSeniorBill.Text = "Senior Bill: P" & senior.ComputeFinalBill()`,opts:["Bill: P1000","Bill: P1200","Bill: P800","Bill: P200"],a:2,why:"M4: the override computes 20% discount = 200, then returns 1000 - 200 = 800."},
+{m:"m4",kind:"error",q:"Which version of a method can NOT be overridden?",code:`Public Class Customer
+    Private Sub Validate()   ' ...
+    End Sub
+End Class`,opts:["A Private method — Overridable must be Public or Protected","A Sub — only Functions can be overridden","A method with no parameters","All of them can"],a:0,why:"M4 rule 3: Private methods cannot be overridden — permission can only be granted on Public or Protected methods."}],complete:[{m:"m1",title:"Declare the constructor",code:`Public Class Dog
+    Private _name As String
+    Private _age As Integer
+
+    Public {{0}} New(startingName As String)
+        _name = startingName
+        _age = 1
+    End {{1}}
+End Class`,blanks:[{ans:"Sub",opts:["Sub","Function","Property"]},{ans:"Sub",opts:["Sub","Class","New"]}],why:"M1: the constructor is always Sub New — it runs once at object creation."},
+{m:"m1",title:"A property that can only be read",code:`Public {{0}} Property Name() As String
+    Get
+        Return _name
+    End Get
+End Property`,blanks:[{ans:"ReadOnly",opts:["ReadOnly","WriteOnly","Private"]}],why:"M1: ReadOnly = Get only. Outside code can read the name but never rename the dog."},
+{m:"m1",title:"The human-year formula",code:`Public Function GetHumanYears() As Integer
+    Return _age * {{0}}
+End Function`,blanks:[{ans:"7",opts:["7","3","21"]}],why:"M1: dog age * 7 — Bantay at 3 is 21 in human years."},
+{m:"m2",title:"Hide the data",code:`Public Class PiggyBank
+    {{0}} _moneyInside As Double = 0
+
+    Public Sub InsertMoney(amount As Double)
+        _moneyInside = _moneyInside + amount
+    End Sub
+End Class`,blanks:[{ans:"Private",opts:["Private","Public","Protected"]}],why:"M2 Golden Rule 1: variables are always Private — information hiding."},
+{m:"m2",title:"Guard the grade",code:`Set(value As Integer)
+    If value < 0 {{0}}
+        MessageBox.Show("Error: A grade cannot be negative!")
+    Else
+        _grade = value
+    End If
+End Set`,blanks:[{ans:"Then",opts:["Then","Do","End If"]}],why:"M2: If...Then — reject the negative value before it ever reaches the field."},
+{m:"m3",title:"Connect the child to its parent",code:`Public Class Student
+    {{0}} Person
+
+    Private _course As String
+End Class`,blanks:[{ans:"Inherits",opts:["Inherits","Implements","Overrides"]}],why:"M3: Inherits Person gives Student the parent's properties and methods."},
+{m:"m3",title:"Pass values up the family tree",code:`Public Sub New(name As String, salary As Double, allowance As Double)
+    MyBase.{{0}}(name, salary)
+    _Allowance = allowance
+End Sub`,blanks:[{ans:"New",opts:["New","ComputePay","Method"]}],why:"M3: MyBase.New(...) calls the parent's constructor with the shared starting values."},
+{m:"m4",title:"Grant permission (parent side)",code:`Public Class Animal
+    Public {{0}} Sub MakeSound()
+        MessageBox.Show("The animal makes a sound.")
+    End Sub
+End Class`,blanks:[{ans:"Overridable",opts:["Overridable","Overrides","NotOverridable"]}],why:"M4: Overridable on the PARENT header is what gives children permission."},
+{m:"m4",title:"Take the permission (child side)",code:`Public Class SeniorCustomer
+    Inherits Customer
+
+    Public {{0}} Function ComputeFinalBill() As Double
+        Dim discount As Double = _totalAmount * 0.2
+        Return _totalAmount - discount
+    End Function
+End Class`,blanks:[{ans:"Overrides",opts:["Overrides","Overridable","Inherits"]}],why:"M4: Overrides on the CHILD header replaces the parent's version — the senior discount."},
+{m:"m4",title:"Keep the base recipe, then add steps",code:`Public Overrides Sub MakeSound()
+    MyBase.{{0}}()   ' run the parent's original first
+    MessageBox.Show("(then the dog adds its own sound)")
+End Sub`,blanks:[{ans:"MakeSound",opts:["MakeSound","Animal","Sound"]}],why:"M4: MyBase.MethodName() runs the original version first — add coconut milk after."}]};
+const ACTIVITIES=[{file:"CS212-Activity",title:"VB.NET Programming Activity",badge:"Group work · 2 problems",
+intro:"Permanent class groupings · VB.NET Windows Forms application. Both problems practice encapsulation: Private fields guarded by Public properties and methods.",
+problems:[
+ {title:"Problem 1 — Student Grade Validator",reqs:[
+  "Create a Student class with a Private _grade (Integer).",
+  "Expose it through a Public Property Grade whose Set accepts ONLY 0 to 100.",
+  "Any other value shows a MessageBox 'Invalid Grade' and the field stays unchanged.",
+  "Form: a TextBox for the grade, a Button to save, and a Label that displays the verified grade from the object."],
+  tests:["Test with: -5, 85, and 105 — only 85 should stick."]},
+ {title:"Problem 2 — ATM Withdrawal System",reqs:[
+  "Create an Account class with a Private _balance (Double) initialized to 5000.00.",
+  "Expose a Read-Only property CurrentBalance.",
+  "Public Sub Withdraw(amount As Double): if amount > _balance show MessageBox 'Insufficient Funds'; otherwise deduct the amount and show 'Withdrawal Successful'.",
+  "Form: a TextBox for the amount, a Button to withdraw, and a Label that constantly updates the CurrentBalance."],
+  tests:["Test with: 1000 (success) and 6000 (insufficient)."]}],
+reminders:["Use Private fields with Public properties/methods — encapsulation is the point.",
+"Do NOT put the logic in the button click — the class guards its own data.",
+"Record a video presentation: the group explains the code line by line and every member speaks.",
+"Submit through the Google Form the day after the activity."]},
+
+{file:"Activity-2",title:"Collaborative Coding: Inheritance",badge:"Pair work · Clinic billing",
+intro:"One Windows Forms application for the Smart Clinic Patient Billing System — demonstrating Inheritance, Encapsulation, and Method Overriding together.",
+problems:[
+ {title:"Member 1 — Base Class & In-Patient Architect",reqs:[
+  "Patient.vb: Protected _patientName (String) and _baseFee (Double).",
+  "Sub New(name, fee): a negative fee is stored as 0.",
+  "Read-Only Property PatientName; Public Property BaseFee whose Set rejects negative fees with a MessageBox.",
+  "Public Overridable Function ComputeBill() As Double — returns _baseFee.",
+  "InPatient.vb: Inherits Patient; Private _daysAdmitted with Property DaysAdmitted (must be at least 1 — otherwise show an error MessageBox and default to 1).",
+  "Sub New(name, fee, days) calls MyBase.New(name, fee), then sets DaysAdmitted = days.",
+  "Public Overrides Function ComputeBill() → _baseFee + (_daysAdmitted * 1500.0) — ₱1,500 per day."],tests:[]},
+ {title:"Member 2 — Out-Patient Specialist & Form Integrator",reqs:[
+  "OutPatient.vb: Inherits Patient; Private _labFee with Property LabFee (non-negative, MessageBox on error).",
+  "Sub New(name, fee, lab) calls MyBase.New(name, fee), then sets LabFee = lab.",
+  "Public Overrides Function ComputeBill() → _baseFee + _labFee.",
+  "Form1.vb: inputs for Patient Name, Base Fee, Days Admitted, Lab Fee.",
+  "Buttons 'Compute In-Patient Bill' and 'Compute Out-Patient Bill' show the patient name and total in a Label."],tests:[]}],
+reminders:["Live-test invalid inputs in the video: a negative fee and 0 days admitted.",
+"The pair explains the code line by line in a video presentation.",
+"Anti-plagiarism: no identical UI or code between pairs.",
+"Submit through the Google Form."],
+rubric:{title:"Grading rubric — 40 points",head:["Criteria","Points","What they check"],rows:[
+ ["Base & Derived Class Architecture","15","Protected fields, Inherits, MyBase.New, Overridable, Overrides"],
+ ["Encapsulation & Windows Forms Execution","10","Input validation + correct calculations"],
+ ["Pair Collaboration & Video","15","Line-by-line explanation, every member participates"]]}},
+/*__ACT__*/];
+const LOOPQUIZZES=[{file:"QUIZ-1 Set 1",title:"Looping Challenge — Coffee Shop Simulator",badge:"Quiz 1 · 30 points",
+intro:"GUI Forms quiz using loops. Controls: btnSimulate1 ('Run Part 1'), btnSimulate2 ('Run Part 2'), ListBox lstOutput, Label lblResult. Clear with lstOutput.Items.Clear() at the start of every click.",
+parts:[
+ {title:"Part 1 — Basic Order",pts:"10 pts · easy",reqs:[
+  "Use a For...Next loop to buy 5 coffees at ₱3 each.",
+  "Each iteration adds 'Coffee #[number] purchased.' to lstOutput.",
+  "After the loop, lblResult shows 'Total cost for 5 coffees: ₱15'."]},
+ {title:"Part 2 — Loyalty Budget",pts:"20 pts · hard",reqs:[
+  "Start with budget = 20 and coffeeCount = 0.",
+  "While budget >= 3: increment coffeeCount.",
+  "If coffeeCount Mod 3 = 0 the coffee is FREE (budget unchanged): 'Coffee #[number] is FREE! Remaining: ₱[amount]'.",
+  "Otherwise subtract 3: 'Coffee #[number] purchased. Remaining: ₱[amount]'.",
+  "After the loop, lblResult shows 'Got [count] coffees. Leftover: ₱[amount]'."]}],
+expected:`Coffee #1 purchased. Remaining: ₱17
+Coffee #2 purchased. Remaining: ₱14
+Coffee #3 is FREE! Remaining: ₱14
+Coffee #4 purchased. Remaining: ₱11
+Coffee #5 purchased. Remaining: ₱8
+Coffee #6 is FREE! Remaining: ₱8
+Coffee #7 purchased. Remaining: ₱5
+Coffee #8 purchased. Remaining: ₱2
+--- lblResult ---
+Got 8 coffees. Leftover: ₱2`},
+
+{file:"QUIZ-1 Set 2",title:"Looping Challenge — Fitness Tracker",badge:"Quiz 1 · 30 points",
+intro:"GUI Forms quiz using loops. Controls: btnRunEasy ('Weekly Steps'), btnRunHard ('Calorie Burner'), multiline TextBox txtOutput (ScrollBars = Vertical), Label lblStatus. Clear with txtOutput.Clear() at the start; join lines with vbCrLf / Environment.NewLine.",
+parts:[
+ {title:"Part 1 — Weekly Steps",pts:"10 pts",reqs:[
+  "Use a For...Next loop from 1 To 7.",
+  "Each day appends 'Day [number]: Logged 1500 steps.' to txtOutput.",
+  "After the loop, lblStatus shows 'Total for week: 10500 steps'."]},
+ {title:"Part 2 — Calorie Burner",pts:"20 pts",reqs:[
+  "Start with caloriesBurned = 0 and lapCount = 0.",
+  "Loop (Do Until / While) while caloriesBurned < 400: increment lapCount.",
+  "If lapCount Mod 4 = 0, add 65 (45 base + 20 bonus): 'Lap [number]: Bonus! Burned 65 cals. Total: [amount]'.",
+  "Otherwise add 45: 'Lap [number]: Burned 45 cals. Total: [amount]'.",
+  "After the loop, lblStatus shows 'Goal reached in [count] laps!'."]}],
+expected:`Lap 1: Burned 45 cals. Total: 45
+Lap 2: Burned 45 cals. Total: 90
+Lap 3: Burned 45 cals. Total: 135
+Lap 4: Bonus! Burned 65 cals. Total: 200
+Lap 5: Burned 45 cals. Total: 245
+Lap 6: Burned 45 cals. Total: 290
+Lap 7: Burned 45 cals. Total: 335
+Lap 8: Bonus! Burned 65 cals. Total: 400
+--- lblStatus ---
+Goal reached in 8 laps!`}
+/*__LOOP__*/];
+/* ================= APP ================= */
+const $=s=>document.querySelector(s);
+const viewEl=$("#view"),mainEl=$("#main"),navEl=$("#nav");
+const MOD=id=>MODULES.find(m=>m.id===id);
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function setStatus(t){$("#statusRight").textContent=t}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+/* ---- VB syntax highlighter ---- */
+const RX=/('[^\n]*)|("(?:[^"\n])*")|\b(\d+(?:\.\d+)?)\b|\b(Public|Private|Protected|Class|Sub|Function|End|Inherits|Overrides|Overridable|NotOverridable|MyBase|Me|Dim|As|New|If|Then|Else|Return|While|Do|Loop|Until|For|Next|To|Mod|And|Or|Not|True|False|ReadOnly|WriteOnly|Property|Get|Set|Shared|ByVal)\b|\b(Integer|Double|String|Boolean|Decimal|Object|MessageBox|Dog|Cat|Animal|Person|Student|Employee|Manager|Customer|SeniorCustomer|PiggyBank|Bank|Account)\b/g;
+function hl(c){return esc(c).replace(RX,(m,cm,st,n,k,t)=>
+  cm?'<span class="c-com">'+cm+"</span>":
+  st?'<span class="c-str">'+st+"</span>":
+  n?'<span class="c-num">'+n+"</span>":
+  k?'<span class="c-key">'+k+"</span>":
+    '<span class="c-typ">'+t+"</span>")}
+function codeBlock(file,code,plain){
+  if(plain)return '<div class="code"><div class="code-tab"><span class="dot"></span>'+esc(file)+'<span class="lang">VB</span></div><pre class="code-body plain">'+code+"</pre></div>";
+  const body=hl(code).split("\n").map(l=>'<span class="cl">'+(l||" ")+"</span>").join("");
+  return '<div class="code"><div class="code-tab"><span class="dot"></span>'+esc(file)+'<span class="lang">VB</span></div><pre class="code-body">'+body+"</pre></div>"}
+function callout(kind,title,inner){return '<div class="callout '+kind+'"><span class="co-title">'+esc(title)+"</span>"+inner+"</div>"}
+function tbl(title,head,rows){
+  const body=rows.map(r=>"<tr>"+r.map(c=>{
+    if(c&&typeof c==="object")return '<td class="'+(c.y?"yes":"no")+'">'+(c.y?"✓":"✗")+"</td>";
+    return "<td>"+esc(c)+"</td>"}).join("")+"</tr>").join("");
+  return (title?"<h3>"+esc(title)+"</h3>":"")+'<div class="twrap"><table><thead><tr>'+head.map(h=>"<th>"+esc(h)+"</th>").join("")+'</tr></thead><tbody>'+body+"</tbody></table></div>"}
+/* ---- NAV ---- */
+const NAV=[
+ {g:"Course"},{href:"#/",label:"Overview",fi:"README.md"},
+ {g:"Lessons"}].concat(MODULES.map(m=>({href:"#/lesson/"+m.id,label:m.title,fi:m.file,sub:m.tag})),[
+ {g:"Practice — written exam formats"},
+ {href:"#/practice/mcq",label:"Multiple Choice",fi:DRILLS.mcq.length+" items"},
+ {href:"#/practice/trace",label:"Identify Output / Error",fi:DRILLS.trace.length+" items"},
+ {href:"#/practice/complete",label:"Complete the Code",fi:DRILLS.complete.length+" items"},
+ {href:"#/practice/flash",label:"Flashcards",fi:FLASHCARDS.length+" cards"},
+ {g:"Course materials"},
+ {href:"#/activities",label:"Activities",fi:ACTIVITIES.length+" briefs"},
+ {href:"#/quizzes",label:"Looping Quizzes",fi:LOOPQUIZZES.length+" sets"}]);
+navEl.innerHTML=NAV.map(n=>n.g?'<div class="nav-group">'+n.g+"</div>":
+ '<a href="'+n.href+'"><span class="fi">'+n.fi+"</span><span>"+n.label+(n.sub?'<span class="sub">'+n.sub+"</span>":"")+"</span></a>").join("");
+/* ---- DRAWER ---- */
+const sb=$("#sidebar"),scrim=$("#scrim"),menuBtn=$("#menuBtn");
+function openDrawer(){sb.classList.add("open");scrim.classList.add("show");menuBtn.setAttribute("aria-expanded","true")}
+function closeDrawer(){sb.classList.remove("open");scrim.classList.remove("show");menuBtn.setAttribute("aria-expanded","false")}
+menuBtn.addEventListener("click",()=>sb.classList.contains("open")?closeDrawer():openDrawer());
+$("#sideClose").addEventListener("click",closeDrawer);
+scrim.addEventListener("click",closeDrawer);
+navEl.addEventListener("click",e=>{if(e.target.closest("a"))closeDrawer()});
+/* ---- VIEWS ---- */
+function homeView(){
+ setStatus("Overview");document.title="OOP Finals Reviewer — CS 212 VB.NET";
+ const cov=tbl("Syllabus coverage — 5 chapters",["Chapter","Status"],[
+  ["Ch 1 — Intro to VB.NET Classes & Objects","Covered — Module 1"],
+  ["Ch 2 — Inheritance","Covered — Module 3"],
+  ["Ch 3 — Encapsulation & Namespaces","Encapsulation covered — Module 2; Namespaces: no module material provided"],
+  ["Ch 4 — Polymorphism & Interfaces","Overriding covered — Module 4; interfaces/abstract classes: no module material provided"],
+  ["Ch 5 — Project Development & Prototyping","Not in this reviewer — coursework & defense"]]);
+ viewEl.innerHTML=
+  '<p class="kicker">CS 212 · Object Oriented Programming · VB.NET · Isabela State University — Cauayan Campus</p>'+
+  "<h1>OOP Finals Reviewer</h1>"+
+  '<p class="lead">Four lessons, four ways to drill — built for the written exam: multiple choice, identify the output or error, and complete the code.</p>'+
+  '<div class="drill-top"><span class="badge blue">Multiple Choice</span><span class="badge amber">Output / Error</span><span class="badge teal">Complete the Code</span><span class="badge green">Flashcards</span></div>'+
+  "<h2>How the four lessons connect</h2>"+
+  '<div class="cmap">'+
+   '<div class="node">Classes &amp; Objects<small>blueprint → object</small></div><div class="link">hide the data</div>'+
+   '<div class="node">Encapsulation<small>private fields, safe doors</small></div><div class="link">extend it</div>'+
+   '<div class="node">Inheritance<small>parent → child</small></div><div class="link">customize behavior</div>'+
+   '<div class="node">Method Overriding<small>same name, new steps</small></div></div>'+
+  "<h2>Lessons</h2>"+'<div class="tiles">'+MODULES.map(m=>
+   '<a class="tile" href="#/lesson/'+m.id+'"><span class="t-file">'+m.file+'</span><span class="t-title">'+m.title+'</span><span class="t-desc">'+m.tag+"</span></a>").join("")+"</div>"+
+  "<h2>Practice</h2>"+'<div class="tiles">'+
+   '<a class="tile" href="#/practice/mcq"><span class="t-file">'+DRILLS.mcq.length+" items</span><span class=\"t-title\">Multiple Choice</span><span class=\"t-desc\">One question at a time, instant feedback, explanation cited from the module.</span></a>"+
+   '<a class="tile" href="#/practice/trace"><span class="t-file">'+DRILLS.trace.length+' items</span><span class="t-title">Identify Output / Error</span><span class="t-desc">Trace the MessageBox result — or spot why the code fails.</span></a>'+
+   '<a class="tile" href="#/practice/complete"><span class="t-file">'+DRILLS.complete.length+' items</span><span class="t-title">Complete the Code</span><span class="t-desc">Fill the blanks from a word bank — tap, no typing.</span></a>'+
+   '<a class="tile" href="#/practice/flash"><span class="t-file">'+FLASHCARDS.length+' cards</span><span class="t-title">Flashcards</span><span class="t-desc">Key terms and definitions, tap to flip, shuffle.</span></a></div>'+
+  "<h2>Course materials</h2>"+'<div class="tiles">'+
+   '<a class="tile" href="#/activities"><span class="t-file">'+ACTIVITIES.length+' briefs</span><span class="t-title">Activities</span><span class="t-desc">Grade Validator, ATM, Clinic Billing — with the rubric.</span></a>'+
+   '<a class="tile" href="#/quizzes"><span class="t-file">'+LOOPQUIZZES.length+' sets</span><span class="t-title">Looping Quizzes</span><span class="t-desc">Coffee Shop &amp; Fitness Tracker with expected outputs.</span></a></div>'+
+  "<h2>Syllabus</h2>"+cov;}
+function lessonView(id){
+ const m=MOD(id);setStatus(m.title);document.title=m.title+" — OOP Finals Reviewer";
+ let h='<p class="kicker">'+m.tag+"</p><h1>"+m.title+"</h1>";
+ if(m.analogy)h+=callout("teal","Analogy — "+m.analogy.title,"<p>"+m.analogy.text+"</p>");
+ (m.intro||[]).forEach(p=>h+="<p>"+p+"</p>");
+ if(m.parts&&m.parts.length){h+='<div class="grid2">'+m.parts.map(p=>
+   '<div class="card"><h3>'+p.name+'</h3><span class="badge blue">'+p.role+"</span><p>"+p.text+"</p></div>").join("")+"</div>";}
+ if(m.goldenRule)h+=callout("blue","Golden Rule",'<ul>'+m.goldenRule.map(r=>"<li>"+r+"</li>").join("")+"</ul>");
+ if(m.kwTable)h+=tbl(m.kwTable.title,m.kwTable.head,m.kwTable.rows);
+ if(m.termsTable)h+=tbl(m.termsTable.title,m.termsTable.head,m.termsTable.rows);
+ if(m.examples&&m.examples.length){h+="<h2>Code walk-through</h2>";
+  m.examples.forEach(ex=>{h+=codeBlock(ex.file,ex.code);
+   h+=callout("amber","What just happened","<ul>"+ex.happened.map(x=>"<li>"+esc(x)+"</li>").join("")+"</ul>")});}
+ if(m.accessTable)h+=tbl(m.accessTable.title,m.accessTable.head,m.accessTable.rows);
+ if(m.rules)h+=callout("red",m.rules.title,"<ul>"+m.rules.items.map(r=>"<li>"+r+"</li>").join("")+"</ul>");
+ h+="<h2>Summary</h2>"+callout("green","Key points","<ul>"+m.summary.map(s=>"<li>"+s+"</li>").join("")+"</ul>");
+ h+='<h2>Drill this module</h2><div class="tiles">'+
+  '<a class="tile" href="#/practice/mcq/'+m.id+'"><span class="t-file">Multiple Choice</span><span class="t-title">Quiz yourself</span></a>'+
+  '<a class="tile" href="#/practice/trace/'+m.id+'"><span class="t-file">Output / Error</span><span class="t-title">Trace the code</span></a>'+
+  '<a class="tile" href="#/practice/complete/'+m.id+'"><span class="t-file">Complete the Code</span><span class="t-title">Fill the blanks</span></a></div>';
+ viewEl.innerHTML=h;}
+function activitiesView(){
+ setStatus("Activities");document.title="Activities — OOP Finals Reviewer";
+ let h='<p class="kicker">From your course files</p><h1>Activities</h1><p class="lead">The actual activity briefs from the PDFs — requirements preserved as written. Attempt them in VB.NET before peeking at the modules.</p>';
+ ACTIVITIES.forEach(a=>{h+='<div class="drill-top"><span class="badge teal">'+a.file+"</span><span class=\"badge\">"+a.badge+"</span></div><h2>"+a.title+"</h2><p>"+a.intro+"</p>";
+  a.problems.forEach(p=>{h+='<div class="card"><h3>'+p.title+"</h3><ul>"+p.reqs.map(r=>"<li>"+r+"</li>").join("")+"</ul>";
+   if(p.tests&&p.tests.length)h+='<p style="margin-bottom:0"><span class="badge red">Must pass</span> '+p.tests.map(esc).join(" · ")+"</p>";h+="</div>"});
+  if(a.rubric)h+=tbl(a.rubric.title,a.rubric.head,a.rubric.rows);
+  h+=callout("amber","Reminders","<ul>"+a.reminders.map(r=>"<li>"+r+"</li>").join("")+"</ul>")});
+ viewEl.innerHTML=h;}
+function quizzesView(){
+ setStatus("Looping Quizzes");document.title="Looping Quizzes — OOP Finals Reviewer";
+ let h='<p class="kicker">Quiz 1 · Looping challenge · 30 points each</p><h1>Looping Challenges</h1><p class="lead">The two Quiz-1 sets, exactly as given. Trace them on paper first — then reveal the expected output.</p>';
+ LOOPQUIZZES.forEach(q=>{h+='<div class="drill-top"><span class="badge teal">'+q.file+"</span><span class=\"badge\">"+q.badge+"</span></div><h2>"+q.title+"</h2><p>"+q.intro+"</p>";
+  q.parts.forEach(p=>{h+='<div class="card"><h3>'+p.title+' <span class="badge blue">'+p.pts+"</span></h3><ul>"+p.reqs.map(r=>"<li>"+r+"</li>").join("")+"</ul></div>"});
+  h+='<details class="reveal"><summary>Reveal expected output — try tracing first</summary><pre class="console">'+esc(q.expected)+"</pre></details>"});
+ viewEl.innerHTML=h;}
+function practiceView(mode,filter){
+ if(mode==="flash")return flashView();
+ if(mode==="mcq"||mode==="trace")return drillView(mode,filter);
+ if(mode==="complete")return completeView(filter);
+ return hubView();}
+function hubView(){
+ setStatus("Practice");document.title="Practice — OOP Finals Reviewer";
+ const out=DRILLS.trace.filter(t=>t.kind==="output").length,err=DRILLS.trace.length-out;
+ viewEl.innerHTML='<p class="kicker">Written exam formats</p><h1>Practice</h1>'+
+  '<p class="lead">Every item is derived strictly from the four module PDFs — nothing invented beyond them.</p><div class="tiles">'+
+  '<a class="tile" href="#/practice/mcq"><span class="t-file">'+DRILLS.mcq.length+' items</span><span class="t-title">Multiple Choice</span><span class="t-desc">The exact exam format — pick one answer, get the reason.</span></a>'+
+  '<a class="tile" href="#/practice/trace"><span class="t-file">'+out+" output · "+err+' error</span><span class="t-title">Identify Output / Error</span><span class="t-desc">Trace what the MessageBox shows, or find why it fails.</span></a>'+
+  '<a class="tile" href="#/practice/complete"><span class="t-file">'+DRILLS.complete.length+' items</span><span class="t-title">Complete the Code</span><span class="t-desc">Word-bank fill-ins of real module code.</span></a>'+
+  '<a class="tile" href="#/practice/flash"><span class="t-file">'+FLASHCARDS.length+' cards</span><span class="t-title">Flashcards</span><span class="t-desc">Rapid-fire key terms.</span></a></div>';}
+/* ---- MCQ / TRACE drills ---- */
+let D=null;
+function drillView(kind,filter){
+ const src=DRILLS[kind].filter(x=>!filter||x.m===filter);
+ D={kind:kind,filter:filter,items:src,i:0,score:0};
+ const label=kind==="mcq"?"Multiple Choice":"Identify Output / Error";
+ setStatus(label+(filter?" · "+MOD(filter).title:""));document.title=label+" — OOP Finals Reviewer";
+ if(!src.length){viewEl.innerHTML='<h1>No items for this module yet.</h1>';return}
+ renderQ()}
+function renderQ(){
+ const q=D.items[D.i],mod=MOD(q.m);
+ let h='<p class="kicker">'+(D.kind==="mcq"?"Multiple Choice":"Identify Output / Error")+" · "+mod.title+'</p><div class="drill-top"><span class="progress-chip">'+(D.i+1)+" / "+D.items.length+'</span><div class="pbar"><i style="width:'+(D.i/D.items.length*100)+'%"></i></div><span class="badge green">Score '+D.score+"</span></div>";
+ h+='<div class="qcard"><p class="qtext">'+esc(q.q)+"</p>";
+ if(q.code)h+=codeBlock(mod.file,q.code);
+ const letters=["A","B","C","D"];
+ h+=q.opts.map((o,ix)=>'<button class="opt" data-ix="'+ix+'"><span class="ol">'+letters[ix]+"</span><span>"+esc(o)+"</span></button>").join("")+"</div>";
+ h+='<div class="feedback" id="fb" aria-live="polite"></div><div id="nextWrap"></div>';
+ viewEl.innerHTML=h;
+ viewEl.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>answerQ(q,+b.dataset.ix,b)))}
+function answerQ(q,ix,btn){
+ viewEl.querySelectorAll(".opt").forEach(b=>{b.disabled=true;
+  if(+b.dataset.ix===q.a)b.classList.add("correct")});
+ const ok=ix===q.a;if(ok){D.score++;$(".badge.green").textContent="Score "+D.score;}
+ if(!ok)btn.classList.add("wrong");
+ const fb=$("#fb");fb.className="feedback "+(ok?"ok":"bad");
+ fb.innerHTML="<b>"+(ok?"Correct.":"Not quite.")+"</b> "+esc(q.why);
+ D.i++;
+ $("#nextWrap").innerHTML='<button class="btn primary" id="nextBtn">'+(D.i<D.items.length?"Next question":"See results")+"</button>";
+ $("#nextBtn").addEventListener("click",()=>D.i<D.items.length?renderQ():renderResult());
+ $("#nextBtn").focus()}
+function renderResult(){
+ const pct=Math.round(D.score/D.items.length*100);
+ viewEl.innerHTML='<div class="score-card card"><p class="kicker">'+(D.kind==="mcq"?"Multiple Choice":"Output / Error")+" — set finished</p>"+
+ '<div class="big">'+D.score+" / "+D.items.length+"</div>"+
+ '<p class="lead">'+(pct===100?"Perfect — exam-ready on this set.":pct>=70?"Solid. Review the misses and run it again.":"Work through the lessons once more, then retry.")+"</p>"+
+ '<div class="fc-nav"><button class="btn primary" id="againBtn">Try again</button><a class="btn ghost" href="#/practice">Back to practice</a></div></div>';
+ $("#againBtn").addEventListener("click",()=>drillView(D.kind,D.filter))}
+/* ---- Flashcards ---- */
+let F=null;
+function flashView(){
+ setStatus("Flashcards");document.title="Flashcards — OOP Finals Reviewer";
+ F={order:shuffle(FLASHCARDS.map((_,i)=>i)),i:0,flipped:false};renderCard()}
+function renderCard(){
+ const c=FLASHCARDS[F.order[F.i]];
+ viewEl.innerHTML='<p class="kicker">Flashcards · '+FLASHCARDS.length+" cards</p><h1>Flip through the terms</h1>"+
+ '<div class="drill-top"><span class="progress-chip">'+(F.i+1)+" / "+FLASHCARDS.length+'</span><div class="pbar"><i style="width:'+(F.i/FLASHCARDS.length*100)+'%"></i></div></div>'+
+ '<div class="fc-wrap"><button class="fc'+(F.flipped?" flipped":"")+'" id="fc" aria-label="Flashcard — tap to flip">'+
+ '<span class="fc-face fc-front"><span class="term">'+esc(c.t)+'</span><span class="hint">tap to reveal</span></span>'+
+ '<span class="fc-face fc-back"><span class="def">'+esc(c.d)+'</span><span class="src">'+esc(c.s)+"</span></span></button></div>"+
+ '<div class="fc-nav"><button class="btn" id="prevB">‹ Prev</button><button class="btn" id="flipB">Flip</button><button class="btn" id="nextB">Next ›</button><button class="btn ghost" id="shufB">Shuffle</button></div>';
+ const card=$("#fc");
+ const flip=()=>{F.flipped=!F.flipped;card.classList.toggle("flipped",F.flipped)};
+ card.addEventListener("click",flip);$("#flipB").addEventListener("click",flip);
+ $("#prevB").addEventListener("click",()=>{F.i=(F.i-1+FLASHCARDS.length)%FLASHCARDS.length;F.flipped=false;renderCard()});
+ $("#nextB").addEventListener("click",()=>{F.i=(F.i+1)%FLASHCARDS.length;F.flipped=false;renderCard()});
+ $("#shufB").addEventListener("click",()=>{shuffle(F.order);F.i=0;F.flipped=false;renderCard()})}
+/* ---- Complete the Code ---- */
+function completeView(filter){
+ const items=DRILLS.complete.filter(x=>!filter||x.m===filter);
+ setStatus("Complete the Code");document.title="Complete the Code — OOP Finals Reviewer";
+ viewEl.innerHTML='<p class="kicker">Written exam format · '+items.length+' items</p><h1>Complete the Code</h1>'+
+ '<p class="lead">Tap a blank, then tap a word from the bank. Real code from the modules — nothing invented.</p>'+
+ items.map((it,ix)=>compCard(it,ix)).join("");
+ items.forEach((it,ix)=>wireComp(it,ix))}
+function compCard(it,ix){
+ const mod=MOD(it.m);
+ const parts=it.code.split(/\{\{(\d+)\}\}/);
+ let body="";
+ for(let s=0;s<parts.length;s++){
+  if(s%2===0){body+=parts[s]?hl(parts[s]):""}
+  else{body+='<button class="blank" data-item="'+ix+'" data-b="'+parts[s]+'">_____</button>'}}
+ return '<div class="qcard"><p class="kicker">'+mod.title+' · <span style="color:var(--bright)">'+esc(it.title)+"</span></p>"+
+ '<div class="code"><div class="code-tab"><span class="dot"></span>'+esc(it.title.replace(/\s+/g,"_"))+'.vb<span class="lang">VB</span></div><pre class="code-body plain">'+body+"</pre>"+
+ '<div class="bank" data-bank="'+ix+'"></div>'+
+ '<div class="comp-actions"><button class="btn primary" data-check="'+ix+'">Check answers</button><button class="btn ghost" data-reset="'+ix+'">Reset</button></div>'+
+ '<div class="feedback" id="fb-'+ix+'" aria-live="polite"></div></div></div>'}
+function wireComp(it,ix){
+ const card=viewEl.querySelectorAll(".qcard")[ix];
+ const bank=card.querySelector(".bank");
+ const words=shuffle([...new Set(it.blanks.flatMap(b=>b.opts))]);
+ bank.innerHTML=words.map(w=>'<button class="chip">'+esc(w)+"</button>").join("");
+ const state=it.blanks.map(()=>null);
+ const blanks=card.querySelectorAll(".blank");
+ let sel=-1;
+ blanks.forEach(b=>b.addEventListener("click",()=>{sel=+b.dataset.b;
+  blanks.forEach(x=>x.classList.remove("selected"));b.classList.add("selected")}));
+ bank.querySelectorAll(".chip").forEach(ch=>ch.addEventListener("click",()=>{
+  if(sel<0)sel=state.findIndex(v=>v===null);if(sel<0)return;
+  state[sel]=ch.textContent;blanks[sel].textContent=ch.textContent;blanks[sel].classList.remove("bad","ok");
+  sel=(state.findIndex(v=>v===null));blanks.forEach(x=>x.classList.remove("selected"));
+  if(sel>=0)blanks[sel].classList.add("selected")}));
+ card.querySelector("[data-check]").addEventListener("click",()=>{
+  let good=0;state.forEach((v,b)=>{const ok=v===it.blanks[b].ans;blanks[b].classList.add(ok?"ok":"bad");blanks[b].classList.remove(ok?"bad":"ok");if(ok)good++});
+  const fb=card.querySelector(".feedback");fb.className="feedback "+(good===it.blanks.length?"ok":"bad");
+  fb.innerHTML="<b>"+good+" / "+it.blanks.length+" correct.</b> "+esc(it.why)});
+ card.querySelector("[data-reset]").addEventListener("click",()=>{
+  state.forEach((_,b)=>{state[b]=null;blanks[b].textContent="_____";blanks[b].className="blank"});sel=-1;
+  card.querySelector(".feedback").className="feedback"})}
+/* ---- ROUTER ---- */
+function route(){
+ const h=location.hash||"#/";const p=h.slice(2).split("/");
+ closeDrawer();
+ if(p[0]==="lesson"&&MOD(p[1]))lessonView(p[1]);
+ else if(p[0]==="practice")practiceView(p[1]||"hub",p[2]);
+ else if(p[0]==="activities")activitiesView();
+ else if(p[0]==="quizzes")quizzesView();
+ else homeView();
+ navEl.querySelectorAll("a").forEach(a=>a.classList.toggle("active",a.getAttribute("href")===h));
+ mainEl.scrollTop=0;viewEl.focus({preventScroll:true})}
+window.addEventListener("hashchange",route);
+$(".skip").addEventListener("click",e=>{e.preventDefault();viewEl.focus()});
+route();
+/* PWA wiring: only when served over HTTP(S) — opening the file directly via file:// stays fully functional as-is */
+if(/^https?:$/.test(location.protocol)){
+ document.head.insertAdjacentHTML("beforeend",'<link rel="manifest" href="manifest.json">');
+ addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+</script>
+</body>
+</html>
