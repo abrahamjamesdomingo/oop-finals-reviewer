@@ -1923,7 +1923,7 @@ route();
 /* PWA wiring: only when served over HTTP(S) — opening the file directly via file:// stays fully functional as-is */
 if(/^https?:$/.test(location.protocol)){
  document.head.insertAdjacentHTML("beforeend",'<link rel="manifest" href="manifest.json">');
- addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+ addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").then(r=>{r.update();r.onupdatefound=()=>{const w=r.installing;if(w){w.onstatechange=()=>{if(w.state==="activated"&&navigator.serviceWorker.controller){window.location.reload();}}}}}).catch(()=>{})});
 }
 </script>
 </body>
